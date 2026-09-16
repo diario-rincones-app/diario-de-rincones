@@ -258,6 +258,17 @@
 
   .notice{font-size:0.75rem;text-align:center;opacity:0.5;margin-top:30px;}
 
+  .month-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;}
+  .month-daycell{background:var(--card-bg);border-radius:10px;border:1px solid var(--paper-line);padding:8px;min-height:64px;cursor:pointer;box-shadow:0 1px 4px rgba(46,42,34,0.06);}
+  .month-daycell:hover{border-color:var(--pizarra);}
+  .month-daycell.empty-cell{background:transparent;box-shadow:none;border:none;cursor:default;}
+  .month-daycell .dnum{font-family:'Baloo 2';font-weight:700;font-size:0.9rem;}
+  .month-daycell .dstat{font-size:0.72rem;margin-top:6px;padding:2px 6px;border-radius:6px;display:inline-block;}
+  .month-daycell.stat-none .dstat{background:#eee;color:#999;}
+  .month-daycell.stat-partial .dstat{background:#FCEBD5;color:#9A6A1B;}
+  .month-daycell.stat-full .dstat{background:#DCEEDF;color:var(--ok);}
+  .month-weekday-label{font-family:'Baloo 2';font-weight:700;font-size:0.78rem;text-align:center;opacity:0.55;padding-bottom:2px;}
+
   @media (max-width:600px){
     header.top h1{font-size:1.5rem;}
     .rincones{grid-template-columns:1fr;}
@@ -358,6 +369,7 @@
     <div class="tabs">
       <button class="tab-btn active" data-view="day">Día</button>
       <button class="tab-btn" data-view="week">Vista semanal</button>
+      <button class="tab-btn" data-view="month">Mes</button>
       <button class="tab-btn" data-view="roster">Alumnado</button>
     </div>
     <div class="day-nav">
@@ -406,6 +418,20 @@
     <div class="week-table-wrap">
       <table class="roster" id="rosterWeekTable"></table>
     </div>
+  </div>
+
+  <!-- MONTH VIEW -->
+  <div class="view" id="view-month">
+    <div class="toolbar">
+      <h2 id="monthLabel">Mes</h2>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-outline btn-sm" id="prevMonthBtn">← Mes anterior</button>
+        <button class="btn btn-outline btn-sm" id="nextMonthBtn">Mes siguiente →</button>
+      </div>
+    </div>
+    <div id="monthLoading" style="text-align:center;padding:30px;opacity:0.6;font-style:italic;">Cargando mes…</div>
+    <div class="month-grid" id="monthGrid" style="display:none;"></div>
+    <div class="notice" style="margin-top:16px;">Pulsa un día para abrirlo en la vista Día.</div>
   </div>
 
   <!-- ROSTER VIEW -->
@@ -897,10 +923,11 @@ document.querySelectorAll('.tab-btn').forEach(btn=>{
     currentView = btn.dataset.view;
     document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
     document.getElementById('view-' + currentView).classList.add('active');
-    document.querySelector('.day-nav').style.display = (currentView === 'roster') ? 'none' : 'flex';
+    document.querySelector('.day-nav').style.display = (currentView === 'roster' || currentView === 'month') ? 'none' : 'flex';
     if(currentView === 'day') render();
     if(currentView === 'week') await renderWeek();
     if(currentView === 'roster') renderRosterEdit();
+    if(currentView === 'month') await renderMonth();
   });
 });
 
@@ -1271,6 +1298,82 @@ async function renderWeek(){
     rosterTable.innerHTML = rhtml;
   }
 }
+
+// ---------- Month view ----------
+let monthCursor = new Date();
+function statusFor(dd){
+  const ids = Object.keys(dd);
+  if(ids.length === 0) return 'none';
+  const total = rincones.length;
+  if(total === 0) return 'none';
+  const doneCount = rincones.filter(r=>dd[r.id] && dd[r.id].completed).length;
+  if(doneCount === 0) return 'none';
+  if(doneCount >= total) return 'full';
+  return 'partial';
+}
+async function renderMonth(){
+  document.getElementById('monthLoading').style.display = 'block';
+  document.getElementById('monthGrid').style.display = 'none';
+  const year = monthCursor.getFullYear();
+  const month = monthCursor.getMonth();
+  document.getElementById('monthLabel').textContent =
+    monthCursor.toLocaleDateString('es-ES', {month:'long', year:'numeric'});
+
+  const firstOfMonth = new Date(year, month, 1);
+  const lastOfMonth = new Date(year, month + 1, 0);
+  const startOffset = (firstOfMonth.getDay() === 0) ? 6 : firstOfMonth.getDay() - 1;
+  const totalCells = startOffset + lastOfMonth.getDate();
+  const rows = Math.ceil(totalCells / 7);
+
+  const allDays = [];
+  for(let day=1; day<=lastOfMonth.getDate(); day++){ allDays.push(new Date(year, month, day)); }
+  const fetched = await Promise.all(allDays.map(d=>loadDayFor(d)));
+  const dayStatusMap = {};
+  allDays.forEach((d,i)=>{ dayStatusMap[d.getDate()] = statusFor(fetched[i]); });
+
+  const grid = document.getElementById('monthGrid');
+  grid.innerHTML = '';
+  ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].forEach(lbl=>{
+    const l = document.createElement('div');
+    l.className = 'month-weekday-label';
+    l.textContent = lbl;
+    grid.appendChild(l);
+  });
+  for(let i=0;i<rows*7;i++){
+    const dayNum = i - startOffset + 1;
+    const cell = document.createElement('div');
+    if(dayNum < 1 || dayNum > lastOfMonth.getDate()){
+      cell.className = 'month-daycell empty-cell';
+      grid.appendChild(cell);
+      continue;
+    }
+    const status = dayStatusMap[dayNum] || 'none';
+    cell.className = 'month-daycell stat-' + status;
+    const statLabel = status === 'full' ? '✓ Completo' : status === 'partial' ? '● Parcial' : '— Sin datos';
+    cell.innerHTML = `<div class="dnum">${dayNum}</div><div class="dstat">${statLabel}</div>`;
+    cell.addEventListener('click', ()=>{
+      currentDate = new Date(year, month, dayNum);
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelector('.tab-btn[data-view="day"]').classList.add('active');
+      currentView = 'day';
+      document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+      document.getElementById('view-day').classList.add('active');
+      document.querySelector('.day-nav').style.display = 'flex';
+      loadDay().then(render);
+    });
+    grid.appendChild(cell);
+  }
+  document.getElementById('monthLoading').style.display = 'none';
+  grid.style.display = 'grid';
+}
+document.getElementById('prevMonthBtn').addEventListener('click', async ()=>{
+  monthCursor = new Date(monthCursor.getFullYear(), monthCursor.getMonth()-1, 1);
+  await renderMonth();
+});
+document.getElementById('nextMonthBtn').addEventListener('click', async ()=>{
+  monthCursor = new Date(monthCursor.getFullYear(), monthCursor.getMonth()+1, 1);
+  await renderMonth();
+});
 
 // ---------- Backup: export / import ----------
 async function exportData(){
