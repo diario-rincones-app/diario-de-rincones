@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Diario de Rincones</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#33534A">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Rincones">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -473,31 +479,76 @@ const SUPABASE_URL = 'https://muemzdfqoegvmljhsqee.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_1K92J4PZJAOPsJ0aJJ0wTg_Z1hVVzDQ';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// ---------- Colchón de seguridad local ----------
+function cacheKey(scope_type, scope_id, key){ return 'diarioRincones_cache::' + scope_type + '::' + scope_id + '::' + key; }
+function getPendingWrites(){
+  try{ return JSON.parse(localStorage.getItem('diarioRincones_pendingWrites') || '[]'); }catch(e){ return []; }
+}
+function savePendingWrites(list){
+  try{ localStorage.setItem('diarioRincones_pendingWrites', JSON.stringify(list)); }catch(e){}
+}
+function queuePendingWrite(scope_type, scope_id, key, value){
+  const list = getPendingWrites().filter(w => !(w.scope_type===scope_type && w.scope_id===scope_id && w.key===key));
+  list.push({ scope_type, scope_id, key, value });
+  savePendingWrites(list);
+}
+async function flushPendingWrites(){
+  const list = getPendingWrites();
+  if(!list.length) return;
+  const remaining = [];
+  for(const w of list){
+    const { error } = await sb.from('kv_store').upsert(
+      { scope_type: w.scope_type, scope_id: w.scope_id, key: w.key, value: w.value, updated_at: new Date().toISOString() },
+      { onConflict: 'scope_type,scope_id,key' }
+    );
+    if(error) remaining.push(w);
+  }
+  savePendingWrites(remaining);
+}
+window.addEventListener('online', flushPendingWrites);
+setInterval(flushPendingWrites, 30000);
+
 window.storage = {
   async get(key, shared){
     const scope_type = shared ? 'aula' : 'user';
     const scope_id = shared ? window.CURRENT_AULA_ID : (window.CURRENT_USER && window.CURRENT_USER.id);
     if(!scope_id) return null;
-    const { data, error } = await sb.from('kv_store').select('value')
-      .eq('scope_type', scope_type).eq('scope_id', scope_id).eq('key', key).maybeSingle();
-    if(error || !data) return null;
-    return { key, value: data.value, shared };
+    try{
+      const { data, error } = await sb.from('kv_store').select('value')
+        .eq('scope_type', scope_type).eq('scope_id', scope_id).eq('key', key).maybeSingle();
+      if(error) throw error;
+      if(!data) return null;
+      try{ localStorage.setItem(cacheKey(scope_type, scope_id, key), data.value); }catch(e){}
+      return { key, value: data.value, shared };
+    }catch(e){
+      // Sin conexión: usamos la última copia guardada en este dispositivo, si existe.
+      let cached = null;
+      try{ cached = localStorage.getItem(cacheKey(scope_type, scope_id, key)); }catch(err){}
+      if(cached !== null) return { key, value: cached, shared };
+      return null;
+    }
   },
   async set(key, value, shared){
     const scope_type = shared ? 'aula' : 'user';
     const scope_id = shared ? window.CURRENT_AULA_ID : (window.CURRENT_USER && window.CURRENT_USER.id);
     if(!scope_id) return null;
+    try{ localStorage.setItem(cacheKey(scope_type, scope_id, key), value); }catch(e){}
     const { error } = await sb.from('kv_store').upsert(
       { scope_type, scope_id, key, value, updated_at: new Date().toISOString() },
       { onConflict: 'scope_type,scope_id,key' }
     );
-    if(error){ console.error('storage.set error', error); return null; }
+    if(error){
+      console.error('storage.set error', error);
+      queuePendingWrite(scope_type, scope_id, key, value);
+      return { key, value, shared };
+    }
     return { key, value, shared };
   },
   async delete(key, shared){
     const scope_type = shared ? 'aula' : 'user';
     const scope_id = shared ? window.CURRENT_AULA_ID : (window.CURRENT_USER && window.CURRENT_USER.id);
     if(!scope_id) return null;
+    try{ localStorage.removeItem(cacheKey(scope_type, scope_id, key)); }catch(e){}
     const { error } = await sb.from('kv_store').delete()
       .eq('scope_type', scope_type).eq('scope_id', scope_id).eq('key', key);
     if(error) return null;
@@ -723,6 +774,37 @@ document.getElementById('authJoinAulaBtn').addEventListener('click', async ()=>{
   document.getElementById('authAulaNameInput').value = '';
   await selectAula(aulaId, aulaNombre);
 });
+let realtimeChannel = null;
+function setupRealtime(){
+  if(realtimeChannel){ sb.removeChannel(realtimeChannel); realtimeChannel = null; }
+  realtimeChannel = sb.channel('aula-' + window.CURRENT_AULA_ID)
+    .on('postgres_changes', {
+      event: '*', schema: 'public', table: 'kv_store',
+      filter: 'scope_id=eq.' + window.CURRENT_AULA_ID
+    }, async (payload)=>{
+      const row = payload.new || payload.old;
+      if(!row || row.scope_type !== 'aula') return;
+      const key = row.key;
+      if(key === 'rincones-config'){
+        await loadRincones();
+        if(currentView === 'day') render();
+        if(currentView === 'week') await renderWeek();
+      } else if(key === 'alumnos-config'){
+        await loadAlumnos();
+        if(currentView === 'day') render();
+        if(currentView === 'week') await renderWeek();
+        if(currentView === 'roster') renderRosterEdit();
+      } else if(key && key.indexOf('dia:') === 0){
+        if(key === 'dia:' + fmtDate(currentDate)){
+          await loadDay();
+          if(currentView === 'day') render();
+        }
+        if(currentView === 'week') await renderWeek();
+      }
+    })
+    .subscribe();
+}
+
 async function selectAula(id, nombre){
   window.CURRENT_AULA_ID = id;
   window.CURRENT_AULA_NOMBRE = nombre;
@@ -737,6 +819,7 @@ async function selectAula(id, nombre){
   if(currentView === 'day') render();
   if(currentView === 'week') await renderWeek();
   if(currentView === 'roster') renderRosterEdit();
+  setupRealtime();
 }
 
 // ---------- Storage helpers ----------
@@ -1278,6 +1361,12 @@ async function init(){
   });
 }
 init();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('/service-worker.js').catch(err=>console.error('SW error', err));
+  });
+}
 </script>
 </body>
 </html>
