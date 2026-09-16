@@ -342,9 +342,58 @@
   .alert-item.urgent{background:#FBDDD3;border-left-color:var(--coral);}
 
   @media (max-width:600px){
-    header.top h1{font-size:1.5rem;}
+    .wrap{padding:0 12px 40px;}
+    header.top{padding:18px 14px 0;border-radius:0 0 14px 14px;}
+
+    .top-row{flex-direction:column;align-items:stretch;gap:8px;}
+    header.top h1{font-size:1.3rem;}
+    .account-bar{align-self:flex-end;margin-bottom:4px;}
+    .account-dropdown{width:calc(100vw - 40px);max-width:280px;}
+
+    .tabs{
+      flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
+      gap:2px;margin:6px -14px 0;padding:0 14px 4px;
+      scrollbar-width:none;
+    }
+    .tabs::-webkit-scrollbar{display:none;}
+    .tab-btn{flex-shrink:0;padding:9px 12px 10px;font-size:0.85rem;white-space:nowrap;}
+
+    .day-nav{gap:6px;padding:10px 0 10px;}
+    .day-nav button{padding:7px 10px;font-size:0.82rem;}
+    .day-label{padding:7px 12px;font-size:0.95rem;order:-1;flex-basis:100%;text-align:center;margin-bottom:4px;}
+
+    .who-row{flex-wrap:wrap;gap:8px;}
+    .who-row > span{display:none;}
+    .who-row input{width:100% !important;flex:1 1 140px;}
+    .who-row .backup-btn{flex:1 1 auto;justify-content:center;}
+
+    .toolbar{gap:8px;}
+    .toolbar h2{font-size:1.1rem;}
+
     .rincones{grid-template-columns:1fr;}
     table.week{font-size:0.75rem;}
+
+    .modal{width:100%;padding:18px;}
+    .modal-actions{flex-wrap:wrap;}
+    .modal-actions button{flex:1 1 auto;}
+
+    .reg-form .row2{flex-direction:column;align-items:stretch;}
+    .reg-form .row2 > *{width:100%;}
+    .reg-valor-btns{width:100%;}
+    .reg-valor-btn{flex:1 1 auto;}
+    .reg-subtabs{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:4px;}
+    .reg-subtab-btn{flex-shrink:0;white-space:nowrap;}
+
+    .trim-config{flex-direction:column;align-items:stretch;}
+    .trim-config span{order:99;}
+
+    .evid-grid{grid-template-columns:repeat(2,1fr);}
+
+    .eval-row{flex-wrap:wrap;}
+    .eval-btns{width:100%;justify-content:flex-start;}
+
+    .month-daycell{min-height:48px;padding:6px;}
+    .month-daycell .dstat{font-size:0.62rem;padding:1px 4px;}
   }
 </style>
 </head>
