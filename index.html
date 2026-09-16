@@ -209,12 +209,18 @@
       <label>Tu email</label>
       <input type="text" id="authEmailInput" placeholder="tuemail@ejemplo.com">
       <div class="modal-actions">
-        <button class="btn btn-add" id="authSendLinkBtn">Enviar enlace de acceso</button>
+        <button class="btn btn-add" id="authSendLinkBtn">Enviar código de acceso</button>
       </div>
     </div>
     <div id="authSentStep" style="display:none;">
       <h3>Revisa tu correo</h3>
-      <p style="font-size:0.85rem;opacity:0.8;">Te hemos enviado un enlace a tu email. Ábrelo para entrar (puede tardar un minuto; revisa spam si no llega).</p>
+      <p style="font-size:0.85rem;opacity:0.8;">Te hemos enviado un código de 6 dígitos a tu email (revisa spam si no llega).</p>
+      <label>Código de 6 dígitos</label>
+      <input type="text" id="authCodeInput" placeholder="123456" maxlength="6" inputmode="numeric">
+      <div class="modal-actions">
+        <button class="btn btn-outline" id="authBackToEmailBtn">Volver</button>
+        <button class="btn btn-add" id="authVerifyCodeBtn">Verificar código</button>
+      </div>
     </div>
     <div id="authAulaStep" style="display:none;">
       <h3>Tu aula</h3>
@@ -408,12 +414,27 @@ function showAuthStep(step){
   document.getElementById('authSentStep').style.display = step === 'sent' ? 'block' : 'none';
   document.getElementById('authAulaStep').style.display = step === 'aula' ? 'block' : 'none';
 }
+let pendingLoginEmail = null;
 document.getElementById('authSendLinkBtn').addEventListener('click', async ()=>{
   const email = document.getElementById('authEmailInput').value.trim();
   if(!email){ alert('Escribe tu email.'); return; }
-  const { error } = await sb.auth.signInWithOtp({ email, options:{ emailRedirectTo: window.location.href } });
-  if(error){ alert('No se pudo enviar el enlace: ' + error.message); return; }
+  const { error } = await sb.auth.signInWithOtp({ email, options:{ shouldCreateUser: true } });
+  if(error){ alert('No se pudo enviar el código: ' + error.message); return; }
+  pendingLoginEmail = email;
   showAuthStep('sent');
+});
+document.getElementById('authBackToEmailBtn').addEventListener('click', ()=>{
+  showAuthStep('login');
+});
+document.getElementById('authVerifyCodeBtn').addEventListener('click', async ()=>{
+  const code = document.getElementById('authCodeInput').value.trim();
+  if(!code){ alert('Escribe el código que te llegó por email.'); return; }
+  if(!pendingLoginEmail){ alert('Vuelve a escribir tu email primero.'); showAuthStep('login'); return; }
+  const { data, error } = await sb.auth.verifyOtp({ email: pendingLoginEmail, token: code, type: 'email' });
+  if(error){ alert('Código incorrecto o caducado: ' + error.message); return; }
+  window.CURRENT_USER = data.user;
+  await loadTeacherName();
+  await showAulaStep();
 });
 document.getElementById('authLogoutBtn').addEventListener('click', async ()=>{
   await sb.auth.signOut();
