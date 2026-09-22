@@ -2809,7 +2809,13 @@ document.getElementById('rosterCsvFile').addEventListener('change', async (e)=>{
       else{ alumnos.push({id: uid(), name, age, evaluations:{}, observations:[]}); imported++; }
     }
     if(imported === 0 && updated === 0){
-      alert('No se ha importado ningún alumno/a. Revisa que el nombre y la edad (3, 4 o 5) estén rellenos, y que la columna Aula coincida con el aula actual si la usas.');
+      let why = 'No se ha importado ningún alumno/a.\n';
+      why += `Filas leídas del archivo: ${rows.length - 1}.\n`;
+      if(skippedAula) why += `Descartadas por no coincidir el Aula: ${skippedAula}.\n`;
+      if(skippedInvalid) why += `Descartadas por falta de nombre o edad no válida: ${skippedInvalid}.\n`;
+      if(!skippedAula && !skippedInvalid) why += 'No se ha podido explicar por qué se han descartado; revisa que las columnas se llamen exactamente Nombre, Edad y Aula.\n';
+      why += `\nAula actual detectada: "${window.CURRENT_AULA_NOMBRE || '(sin aula)'}".`;
+      alert(why);
       e.target.value = '';
       return;
     }
