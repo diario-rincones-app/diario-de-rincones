@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- VERSION-DIARIO: 2026-09-22-csv-fix-v3-nombre-con-comas -->
+<!-- VERSION-DIARIO: 2026-09-22-v4-numero-lista -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -233,6 +233,7 @@
   .roster-list .row input[type=text]{flex:1;}
   .roster-list .row select{border:1px solid var(--paper-line);border-radius:8px;padding:6px;font-size:0.8rem;}
   .roster-list .row button{background:#f2eadb;border:none;border-radius:6px;width:26px;height:26px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:var(--ink);}
+  .roster-num{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--pizarra);color:var(--tiza);font-family:var(--font-display);font-weight:600;font-size:0.78rem;display:inline-flex;align-items:center;justify-content:center;}
 
   .top-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
   .account-bar{position:relative;display:inline-block;margin-bottom:10px;flex-shrink:0;}
@@ -1586,10 +1587,14 @@ function renderRosterEdit(){
   if(alumnos.length === 0){
     box.innerHTML = '<div class="empty">Aún no hay alumnado añadido.</div>';
   }
-  alumnos.forEach(child=>{
+  // Se muestra ordenado alfabéticamente por nombre (Apellidos, Nombre), sin reordenar
+  // el array original, para que el número de lista sea siempre el orden alfabético.
+  const sorted = [...alumnos].sort((a,b)=> a.name.localeCompare(b.name, 'es', {sensitivity:'base'}));
+  sorted.forEach((child, idx)=>{
     const row = document.createElement('div');
     row.className = 'row';
     row.innerHTML = `
+      <span class="roster-num">${idx + 1}</span>
       <input type="text" value="${escapeHtml(child.name)}">
       <select>
         <option value="3" ${child.age==='3'?'selected':''}>3 años</option>
@@ -1601,7 +1606,7 @@ function renderRosterEdit(){
     const nameInput = row.querySelector('input');
     const ageSelect = row.querySelector('select');
     const delBtn = row.querySelector('button');
-    nameInput.addEventListener('change', async ()=>{ child.name = nameInput.value.trim() || child.name; await saveAlumnos(); });
+    nameInput.addEventListener('change', async ()=>{ child.name = nameInput.value.trim() || child.name; await saveAlumnos(); renderRosterEdit(); });
     ageSelect.addEventListener('change', async ()=>{ child.age = ageSelect.value; await saveAlumnos(); });
     delBtn.addEventListener('click', async ()=>{
       if(confirm('¿Eliminar a ' + child.name + ' del listado?')){
