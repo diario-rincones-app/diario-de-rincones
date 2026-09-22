@@ -2793,10 +2793,17 @@ document.getElementById('rosterCsvFile').addEventListener('change', async (e)=>{
     for(let i=1; i<rows.length; i++){
       const r = rows[i];
       const name = (r[nameIdx] || '').trim();
-      const age = (r[ageIdx] || '').trim();
+      // Normaliza la edad: acepta "3", "3.0", "3 años", espacios extra, etc.
+      const ageRaw = (r[ageIdx] || '').trim();
+      const ageMatch = ageRaw.match(/[345]/);
+      const age = ageMatch ? ageMatch[0] : '';
       const aula = aulaIdx > -1 ? (r[aulaIdx] || '').trim() : '';
-      if(!name || !['3','4','5'].includes(age)){ skippedInvalid++; continue; }
-      if(aulaIdx > -1 && aula && aulaActual && aula.trim().toLowerCase() !== aulaActual){ skippedAula++; continue; }
+      if(!name || !age){ skippedInvalid++; continue; }
+      if(aulaIdx > -1 && aula && aulaActual){
+        const aulaNorm = aula.trim().toLowerCase().replace(/\s+/g,' ');
+        const aulaActualNorm = aulaActual.replace(/\s+/g,' ');
+        if(aulaNorm !== aulaActualNorm){ skippedAula++; continue; }
+      }
       const existing = alumnos.find(c => c.name.trim().toLowerCase() === name.toLowerCase());
       if(existing){ existing.age = age; updated++; }
       else{ alumnos.push({id: uid(), name, age, evaluations:{}, observations:[]}); imported++; }
