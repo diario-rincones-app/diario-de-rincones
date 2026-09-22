@@ -2129,7 +2129,7 @@ async function renderAvisosTutorias(){
   box.appendChild(summary);
   const listWrap = document.createElement('div');
   listWrap.style.marginTop = '6px';
-  listWrap.innerHTML = pending.map(n=>`<span class="tag" style="background:${urgent ? 'var(--coral)' : 'var(--azul)'};display:inline-block;margin:3px 4px 0 0;">${escapeHtml(n)}</span>`).join('');
+  listWrap.innerHTML = pending.map(n=>`<span class="tag" style="background:${urgent ? 'var(--coral)' : 'var(--amarillo)'};display:inline-block;margin:3px 4px 0 0;">${escapeHtml(n)}</span>`).join('');
   box.appendChild(listWrap);
 }
 
