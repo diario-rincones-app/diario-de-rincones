@@ -11,82 +11,93 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Rincones">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root{
-    --paper: #FBF8F2;
-    --paper-line: #E4DCC8;
-    --ink: #2E2A22;
-    --pizarra: #33534A;
-    --pizarra-dark: #24352F;
+    --paper: #F7F4EC;
+    --paper-line: #E2DAC8;
+    --ink: #34302A;
+    --pizarra: #2B3B36;
+    --pizarra-dark: #1E2B27;
     --tiza: #F4F1E8;
-    --madera: #B98352;
-    --coral: #E4693C;
-    --amarillo: #E8A93A;
-    --azul: #3E7CA6;
-    --verde: #6E9B4A;
-    --lila: #8B6FA8;
-    --rosa: #D66B93;
-    --ok: #4E8B5C;
+    --madera: #C4622D;
+    --coral: #C0432B;
+    --amarillo: #D19A3E;
+    --azul: #3D6E8A;
+    --verde: #4A7A6B;
+    --lila: #8A6D9C;
+    --rosa: #B85C7E;
+    --ok: #4A7A6B;
     --radius: 14px;
+    --radius-sm: 9px;
     --card-bg: #FFFFFF;
+    --shadow-sm: 0 1px 3px rgba(43,59,54,0.08), 0 1px 2px rgba(43,59,54,0.05);
+    --shadow-md: 0 4px 14px rgba(43,59,54,0.10), 0 1px 3px rgba(43,59,54,0.06);
+    --shadow-lg: 0 14px 34px rgba(30,43,39,0.20);
+    --font-display:'Fraunces', serif;
+    --font-body:'Inter', sans-serif;
   }
   :root[data-theme="dark"]{
     --paper: #1B211E;
-    --paper-line: #2E362F;
+    --paper-line: #33403A;
     --ink: #EDE8DC;
     --tiza: #F4F1E8;
-    --card-bg: #242B26;
+    --card-bg: #232B27;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.25);
+    --shadow-md: 0 4px 14px rgba(0,0,0,0.3);
+    --shadow-lg: 0 14px 34px rgba(0,0,0,0.4);
   }
   *{box-sizing:border-box;}
+  *:focus-visible{outline:2.5px solid var(--madera);outline-offset:2px;border-radius:4px;}
   body{
     margin:0;
     background:var(--paper);
-    background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
-    background-size: 100% 2.1em;
-    background-position: 0 5.4em;
     color:var(--ink);
-    font-family:'Inter', sans-serif;
+    font-family:var(--font-body);
     min-height:100vh;
+    -webkit-font-smoothing:antialiased;
   }
   .wrap{max-width:1080px;margin:0 auto;padding:0 20px 60px;}
 
   header.top{
     background:var(--pizarra);
-    background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.03), transparent 60%);
     color:var(--tiza);
-    padding:26px 20px 0;
-    border-radius:0 0 20px 20px;
-    margin-bottom:22px;
-    box-shadow:0 6px 18px rgba(36,53,47,0.25);
+    padding:28px 24px 0;
+    border-radius:0 0 22px 22px;
+    margin-bottom:24px;
+    box-shadow:var(--shadow-lg);
   }
   .top-inner{max-width:1080px;margin:0 auto;}
   header.top h1{
-    font-family:'Baloo 2', sans-serif;
-    font-weight:800;
-    font-size:1.9rem;
-    margin:0 0 2px;
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:1.85rem;
+    letter-spacing:-0.01em;
+    margin:0 0 3px;
     display:flex;
     align-items:center;
     gap:10px;
   }
-  header.top .sub{font-size:0.9rem;opacity:0.75;margin-bottom:16px;}
+  header.top .sub{font-size:0.88rem;opacity:0.68;margin-bottom:18px;font-family:var(--font-body);}
 
-  .tabs{display:flex;gap:4px;margin-top:6px;}
+  .tabs{display:flex;gap:2px;margin-top:8px;}
   .tab-btn{
     background:transparent;
     border:none;
     color:var(--tiza);
-    opacity:0.6;
-    font-family:'Baloo 2';
-    font-weight:700;
-    font-size:0.95rem;
-    padding:10px 18px 12px;
+    opacity:0.58;
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.92rem;
+    padding:11px 16px 13px;
     cursor:pointer;
     border-bottom:3px solid transparent;
+    border-radius:8px 8px 0 0;
+    transition:opacity 0.15s, background 0.15s;
   }
-  .tab-btn.active{opacity:1;border-bottom:3px solid var(--amarillo);}
+  .tab-btn:hover{opacity:0.85;background:rgba(255,255,255,0.05);}
+  .tab-btn.active{opacity:1;border-bottom:3px solid var(--madera);color:var(--tiza);}
 
   .day-nav{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 0 14px;}
   .day-nav button{
@@ -95,25 +106,25 @@
     color:var(--tiza);
     border-radius:10px;
     padding:8px 12px;
-    font-family:'Inter';
+    font-family:var(--font-body);
     font-size:0.9rem;
     cursor:pointer;
   }
   .day-nav button:hover{background:rgba(255,255,255,0.2);}
   .day-label{
-    font-family:'Baloo 2';font-weight:700;font-size:1.1rem;
+    font-family:var(--font-display);font-weight:600;font-size:1.1rem;
     background:var(--tiza);color:var(--pizarra-dark);
     padding:8px 16px;border-radius:10px;text-transform:capitalize;
   }
   .who-row{display:flex;align-items:center;gap:8px;font-size:0.85rem;opacity:0.85;padding-bottom:16px;}
   .who-row input{
     background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);
-    color:var(--tiza);border-radius:8px;padding:6px 10px;font-family:'Inter';font-size:0.85rem;
+    color:var(--tiza);border-radius:8px;padding:6px 10px;font-family:var(--font-body);font-size:0.85rem;
   }
   .who-row input::placeholder{color:rgba(244,241,232,0.5);}
   .backup-btn{
     background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.22);color:var(--tiza);
-    border-radius:8px;padding:6px 11px;font-family:'Inter';font-size:0.78rem;cursor:pointer;
+    border-radius:8px;padding:6px 11px;font-family:var(--font-body);font-size:0.78rem;cursor:pointer;
   }
   .backup-btn:hover{background:rgba(255,255,255,0.2);}
 
@@ -121,13 +132,14 @@
   .view.active{display:block;}
 
   .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
-  .toolbar h2{font-family:'Baloo 2';font-size:1.3rem;margin:0;}
-  .btn{font-family:'Inter';font-weight:600;font-size:0.85rem;border:none;border-radius:10px;padding:9px 14px;cursor:pointer;}
+  .toolbar h2{font-family:var(--font-display);font-weight:600;font-size:1.3rem;margin:0;}
+  .btn{font-family:var(--font-body);font-weight:600;font-size:0.85rem;border:none;border-radius:var(--radius-sm);padding:10px 16px;cursor:pointer;transition:filter 0.12s, background 0.12s, transform 0.05s;}
+  .btn:active{transform:translateY(1px);}
   .btn-outline{background:transparent;border:1.5px solid var(--pizarra);color:var(--pizarra);}
   .btn-outline:hover{background:var(--pizarra);color:var(--tiza);}
   .btn-add{background:var(--madera);color:white;}
   .btn-add:hover{filter:brightness(1.08);}
-  .btn-sm{padding:5px 10px;font-size:0.78rem;border-radius:7px;}
+  .btn-sm{padding:6px 11px;font-size:0.78rem;border-radius:7px;}
 
   #loading{text-align:center;padding:60px 0;opacity:0.7;display:flex;flex-direction:column;align-items:center;gap:12px;font-style:normal;}
   .spinner{
@@ -142,15 +154,16 @@
   .btn-icon-label{display:inline-flex;align-items:center;gap:6px;}
 
   .rincones{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:18px;}
-  .rincon{background:var(--card-bg);border-radius:var(--radius);box-shadow:0 2px 10px rgba(46,42,34,0.08);overflow:hidden;border:1px solid rgba(46,42,34,0.06);display:flex;flex-direction:column;}
-  .rincon.done{opacity:0.9;}
+  .rincon{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow-md);overflow:hidden;border:1px solid rgba(43,59,54,0.06);display:flex;flex-direction:column;transition:box-shadow 0.15s;}
+  .rincon:hover{box-shadow:var(--shadow-lg);}
+  .rincon.done{opacity:0.92;}
   .tab-head{padding:12px 16px;color:white;display:flex;justify-content:space-between;align-items:center;gap:8px;}
-  .tab-head .name{font-family:'Baloo 2';font-weight:700;font-size:1.02rem;}
+  .tab-head .name{font-family:var(--font-display);font-weight:600;font-size:1.02rem;}
   .tab-head .actions{display:flex;gap:6px;}
   .tab-head button{background:rgba(255,255,255,0.2);border:none;color:white;width:24px;height:24px;border-radius:6px;cursor:pointer;font-size:0.82rem;line-height:1;display:inline-flex;align-items:center;justify-content:center;}
   .body-r{padding:14px 16px 16px;flex:1;display:flex;flex-direction:column;gap:10px;}
 
-  .activity-input{width:100%;border:1px solid var(--paper-line);border-radius:8px;padding:8px 10px;font-family:'Inter';font-size:0.9rem;resize:vertical;min-height:44px;background:var(--paper);}
+  .activity-input{width:100%;border:1px solid var(--paper-line);border-radius:8px;padding:8px 10px;font-family:var(--font-body);font-size:0.9rem;resize:vertical;min-height:44px;background:var(--paper);}
   .check-row{display:flex;align-items:center;gap:8px;font-size:0.85rem;cursor:pointer;user-select:none;}
   .check-row input{width:18px;height:18px;accent-color:var(--ok);cursor:pointer;}
   .check-meta{font-size:0.75rem;opacity:0.55;}
@@ -171,16 +184,16 @@
   .obs-item{background:var(--paper);border-left:3px solid var(--madera);padding:6px 9px;border-radius:6px;font-size:0.82rem;}
   .obs-item .meta{font-size:0.7rem;opacity:0.55;margin-top:2px;}
   .obs-add{display:flex;gap:6px;}
-  .obs-add input{flex:1;border:1px solid var(--paper-line);border-radius:8px;padding:7px 9px;font-size:0.82rem;font-family:'Inter';}
+  .obs-add input{flex:1;border:1px solid var(--paper-line);border-radius:8px;padding:7px 9px;font-size:0.82rem;font-family:var(--font-body);}
   .obs-add button{border:none;background:var(--pizarra);color:white;border-radius:8px;padding:0 12px;cursor:pointer;font-size:0.9rem;display:inline-flex;align-items:center;justify-content:center;}
 
   .empty{text-align:center;padding:50px 20px;color:var(--ink);opacity:0.55;font-style:italic;}
 
   /* Weekly view */
-  .week-table-wrap{overflow-x:auto;background:var(--card-bg);border-radius:var(--radius);box-shadow:0 2px 10px rgba(46,42,34,0.08);margin-bottom:26px;}
+  .week-table-wrap{overflow-x:auto;background:var(--card-bg);border-radius:var(--radius);box-shadow:0 2px 10px rgba(43,59,54,0.08);margin-bottom:26px;}
   table.week{border-collapse:collapse;width:100%;font-size:0.85rem;}
   table.week th, table.week td{border:1px solid var(--paper-line);padding:8px 10px;text-align:left;vertical-align:top;}
-  table.week th{background:var(--pizarra);color:var(--tiza);font-family:'Baloo 2';font-weight:600;font-size:0.85rem;text-transform:capitalize;}
+  table.week th{background:var(--pizarra);color:var(--tiza);font-family:var(--font-display);font-weight:600;font-size:0.85rem;text-transform:capitalize;}
   table.week td.rincon-name{font-weight:700;white-space:nowrap;}
   table.week .act-text{font-size:0.8rem;}
   table.week .done-mark{color:var(--ok);font-weight:700;}
@@ -188,19 +201,19 @@
 
   table.roster{border-collapse:collapse;width:100%;font-size:0.82rem;}
   table.roster th, table.roster td{border:1px solid var(--paper-line);padding:7px 9px;text-align:center;}
-  table.roster th{background:var(--pizarra);color:var(--tiza);font-family:'Baloo 2';font-size:0.8rem;}
+  table.roster th{background:var(--pizarra);color:var(--tiza);font-family:var(--font-display);font-weight:600;font-size:0.8rem;}
   table.roster td.child-name{text-align:left;font-weight:600;white-space:nowrap;}
   table.roster .yes{color:var(--ok);font-weight:800;}
   table.roster .no{opacity:0.25;}
 
-  h3.section-title{font-family:'Baloo 2';font-size:1.1rem;margin:0 0 10px;}
+  h3.section-title{font-family:var(--font-display);font-weight:600;font-size:1.1rem;margin:0 0 10px;}
 
   /* Modals */
-  .modal-bg{position:fixed;inset:0;background:rgba(36,53,47,0.45);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px;}
+  .modal-bg{position:fixed;inset:0;background:rgba(30,43,39,0.45);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px;}
   .modal{background:var(--card-bg);border-radius:16px;padding:22px;width:380px;max-width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 12px 30px rgba(0,0,0,0.2);}
-  .modal h3{font-family:'Baloo 2';margin:0 0 14px;}
+  .modal h3{font-family:var(--font-display);font-weight:600;font-size:1.15rem;margin:0 0 14px;}
   .modal label{font-size:0.8rem;font-weight:600;display:block;margin:10px 0 4px;}
-  .modal input[type=text]{width:100%;padding:8px 10px;border:1px solid var(--paper-line);border-radius:8px;font-family:'Inter';}
+  .modal input[type=text]{width:100%;padding:8px 10px;border:1px solid var(--paper-line);border-radius:8px;font-family:var(--font-body);}
   .swatches{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;}
   .swatch{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;}
   .swatch.sel{border-color:var(--ink);}
@@ -225,12 +238,12 @@
   .account-pill{
     display:inline-flex;align-items:center;gap:8px;
     background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.22);
-    color:var(--tiza);border-radius:20px;padding:6px 12px;cursor:pointer;font-family:'Inter';font-size:0.82rem;
+    color:var(--tiza);border-radius:20px;padding:6px 12px;cursor:pointer;font-family:var(--font-body);font-size:0.82rem;
   }
   .account-pill:hover{background:rgba(255,255,255,0.18);}
   .account-avatar{
     width:22px;height:22px;border-radius:50%;background:var(--madera);color:white;
-    display:flex;align-items:center;justify-content:center;font-family:'Baloo 2';font-weight:700;font-size:0.75rem;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:600;font-size:0.75rem;flex-shrink:0;
   }
   .account-dropdown{
     display:none;position:absolute;top:calc(100% + 8px);right:0;z-index:40;
@@ -238,13 +251,13 @@
     padding:14px;width:250px;
   }
   .account-dropdown.open{display:block;}
-  .account-dropdown .name{font-family:'Baloo 2';font-weight:700;font-size:0.95rem;}
+  .account-dropdown .name{font-family:var(--font-display);font-weight:600;font-size:0.95rem;}
   .account-dropdown .email{font-size:0.76rem;opacity:0.6;margin-bottom:2px;word-break:break-all;}
   .account-dropdown .especialidad{font-size:0.78rem;opacity:0.8;margin-bottom:10px;}
   .account-dropdown .divider{height:1px;background:var(--paper-line);margin:8px 0;}
   .account-dropdown button{
     display:flex;align-items:center;gap:8px;width:100%;text-align:left;
-    background:none;border:none;padding:8px 4px;border-radius:8px;cursor:pointer;font-family:'Inter';font-size:0.85rem;color:var(--ink);
+    background:none;border:none;padding:8px 4px;border-radius:8px;cursor:pointer;font-family:var(--font-body);font-size:0.85rem;color:var(--ink);
   }
   .account-dropdown button:hover{background:var(--paper);}
   .theme-switch-row{display:flex;align-items:center;justify-content:space-between;padding:6px 4px;font-size:0.85rem;}
@@ -260,25 +273,25 @@
   .notice{font-size:0.75rem;text-align:center;opacity:0.5;margin-top:30px;}
 
   .month-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;}
-  .month-daycell{background:var(--card-bg);border-radius:10px;border:1px solid var(--paper-line);padding:8px;min-height:64px;cursor:pointer;box-shadow:0 1px 4px rgba(46,42,34,0.06);}
+  .month-daycell{background:var(--card-bg);border-radius:10px;border:1px solid var(--paper-line);padding:8px;min-height:64px;cursor:pointer;box-shadow:0 1px 4px rgba(43,59,54,0.06);}
   .month-daycell:hover{border-color:var(--pizarra);}
   .month-daycell.empty-cell{background:transparent;box-shadow:none;border:none;cursor:default;}
-  .month-daycell .dnum{font-family:'Baloo 2';font-weight:700;font-size:0.9rem;}
+  .month-daycell .dnum{font-family:var(--font-display);font-weight:600;font-size:0.9rem;}
   .month-daycell .dstat{font-size:0.72rem;margin-top:6px;padding:2px 6px;border-radius:6px;display:inline-block;}
   .month-daycell.stat-none .dstat{background:#eee;color:#999;}
   .month-daycell.stat-partial .dstat{background:#FCEBD5;color:#9A6A1B;}
   .month-daycell.stat-full .dstat{background:#DCEEDF;color:var(--ok);}
-  .month-weekday-label{font-family:'Baloo 2';font-weight:700;font-size:0.78rem;text-align:center;opacity:0.55;padding-bottom:2px;}
+  .month-weekday-label{font-family:var(--font-display);font-weight:600;font-size:0.78rem;text-align:center;opacity:0.55;padding-bottom:2px;}
 
   .worked-ind-box{background:var(--paper);border:1px solid var(--paper-line);border-radius:8px;padding:8px 10px;}
   .worked-age-block{margin-bottom:6px;}
   .worked-age-block:last-child{margin-bottom:0;}
   .worked-age-title{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;opacity:0.55;margin-bottom:2px;}
 
-  .report-block{background:var(--card-bg);border-radius:var(--radius);box-shadow:0 2px 10px rgba(46,42,34,0.08);padding:16px 18px;margin-bottom:20px;}
+  .report-block{background:var(--card-bg);border-radius:var(--radius);box-shadow:0 2px 10px rgba(43,59,54,0.08);padding:16px 18px;margin-bottom:20px;}
   .alert-item{background:#FCEBD5;border-left:3px solid var(--amarillo);padding:7px 10px;border-radius:6px;font-size:0.84rem;margin-bottom:6px;}
   .no-alert{opacity:0.55;font-style:italic;font-size:0.85rem;}
-  .area-report-title{font-family:'Baloo 2';font-weight:700;font-size:0.88rem;margin:12px 0 6px;}
+  .area-report-title{font-family:var(--font-display);font-weight:600;font-size:0.88rem;margin:12px 0 6px;}
   .heat-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.8rem;}
   .heat-bar-wrap{flex:1;background:var(--paper);border-radius:5px;overflow:hidden;height:16px;}
   .heat-bar{height:100%;background:var(--madera);}
@@ -288,38 +301,39 @@
   .eval-text{flex:1;font-size:0.85rem;}
   .eval-badge{font-size:0.68rem;background:var(--paper);border-radius:5px;padding:2px 6px;opacity:0.7;white-space:nowrap;}
   .eval-btns{display:flex;gap:4px;}
-  .eval-btn{border:1.5px solid var(--paper-line);background:var(--card-bg);color:var(--ink);border-radius:6px;padding:4px 8px;font-size:0.68rem;cursor:pointer;font-family:'Inter';white-space:nowrap;}
-  .eval-btn.lvl-no.active{background:#eee;border-color:#999;color:#555;font-weight:700;}
+  .eval-btn{border:1.5px solid var(--paper-line);background:var(--card-bg);color:var(--ink);border-radius:7px;padding:6px 10px;font-size:0.72rem;cursor:pointer;font-family:var(--font-body);white-space:nowrap;transition:filter 0.12s;}
+  .eval-btn:hover{filter:brightness(0.97);}
+  .eval-btn.lvl-no.active{background:#EDE9DD;border-color:#A39A82;color:#5C5747;font-weight:700;}
   .eval-btn.lvl-proceso.active{background:var(--amarillo);border-color:var(--amarillo);color:white;font-weight:700;}
   .eval-btn.lvl-conseguido.active{background:var(--ok);border-color:var(--ok);color:white;font-weight:700;}
   .child-obs-list{margin:10px 0;display:flex;flex-direction:column;gap:6px;}
   .child-obs-item{background:var(--paper);border-left:3px solid var(--madera);padding:6px 9px;border-radius:6px;font-size:0.82rem;display:flex;justify-content:space-between;gap:8px;align-items:flex-start;}
   .child-obs-item .del-obs{border:none;background:none;cursor:pointer;opacity:0.5;font-size:0.9rem;flex-shrink:0;}
   .child-obs-add{display:flex;gap:8px;margin-top:8px;}
-  .child-obs-add textarea{flex:1;border:1px solid var(--paper-line);border-radius:8px;padding:7px 9px;font-family:'Inter';font-size:0.82rem;resize:vertical;min-height:44px;}
+  .child-obs-add textarea{flex:1;border:1px solid var(--paper-line);border-radius:8px;padding:7px 9px;font-family:var(--font-body);font-size:0.82rem;resize:vertical;min-height:44px;}
   .child-obs-add button{border:none;background:var(--pizarra);color:white;border-radius:8px;padding:0 14px;cursor:pointer;font-size:0.85rem;}
 
-  .trim-config{display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:0.82rem;background:var(--card-bg);border-radius:10px;padding:10px 14px;margin-bottom:14px;box-shadow:0 2px 10px rgba(46,42,34,0.08);}
-  .trim-config select, .trim-config input[type=date]{border:1px solid var(--paper-line);border-radius:7px;padding:5px 8px;font-family:'Inter';font-size:0.82rem;background:var(--card-bg);color:var(--ink);}
+  .trim-config{display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:0.82rem;background:var(--card-bg);border-radius:10px;padding:10px 14px;margin-bottom:14px;box-shadow:0 2px 10px rgba(43,59,54,0.08);}
+  .trim-config select, .trim-config input[type=date]{border:1px solid var(--paper-line);border-radius:7px;padding:5px 8px;font-family:var(--font-body);font-size:0.82rem;background:var(--card-bg);color:var(--ink);}
   .trim-config label{font-weight:600;}
 
   .reg-subtabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
-  .reg-subtab-btn{background:var(--paper);border:1px solid var(--paper-line);border-radius:8px;padding:7px 14px;font-family:'Inter';font-weight:600;font-size:0.82rem;cursor:pointer;color:var(--ink);opacity:0.6;}
+  .reg-subtab-btn{background:var(--paper);border:1px solid var(--paper-line);border-radius:8px;padding:7px 14px;font-family:var(--font-body);font-weight:600;font-size:0.82rem;cursor:pointer;color:var(--ink);opacity:0.6;}
   .reg-subtab-btn.active{opacity:1;background:var(--pizarra);color:var(--tiza);border-color:var(--pizarra);}
   .reg-section{display:none;}
   .reg-section.active{display:block;}
 
   .reg-form{background:var(--paper);border-radius:12px;padding:14px 16px;margin-bottom:16px;border:1px solid var(--paper-line);}
   .reg-form .row2{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;align-items:center;}
-  .reg-form select, .reg-form input[type=text], .reg-form input[type=date]{border:1px solid var(--paper-line);border-radius:8px;padding:7px 9px;font-family:'Inter';font-size:0.85rem;background:var(--card-bg);color:var(--ink);}
-  .reg-form textarea{width:100%;min-height:60px;resize:vertical;border:1px solid var(--paper-line);border-radius:8px;padding:8px 10px;font-family:'Inter';font-size:0.85rem;background:var(--card-bg);color:var(--ink);}
+  .reg-form select, .reg-form input[type=text], .reg-form input[type=date]{border:1px solid var(--paper-line);border-radius:8px;padding:7px 9px;font-family:var(--font-body);font-size:0.85rem;background:var(--card-bg);color:var(--ink);}
+  .reg-form textarea{width:100%;min-height:60px;resize:vertical;border:1px solid var(--paper-line);border-radius:8px;padding:8px 10px;font-family:var(--font-body);font-size:0.85rem;background:var(--card-bg);color:var(--ink);}
   .reg-valor-btns{display:flex;gap:6px;flex-wrap:wrap;}
-  .reg-valor-btn{border:1.5px solid var(--paper-line);background:var(--card-bg);color:var(--ink);border-radius:7px;padding:6px 12px;font-size:0.78rem;cursor:pointer;font-family:'Inter';}
+  .reg-valor-btn{border:1.5px solid var(--paper-line);background:var(--card-bg);color:var(--ink);border-radius:7px;padding:6px 12px;font-size:0.78rem;cursor:pointer;font-family:var(--font-body);}
   .reg-valor-btn.lvl-logro.sel{background:var(--ok);border-color:var(--ok);color:white;font-weight:700;}
   .reg-valor-btn.lvl-proceso.sel{background:var(--amarillo);border-color:var(--amarillo);color:white;font-weight:700;}
   .reg-valor-btn.lvl-dificultad.sel{background:var(--coral);border-color:var(--coral);color:white;font-weight:700;}
 
-  .reg-item{background:var(--card-bg);border-left:3px solid var(--madera);border-radius:8px;padding:8px 11px;margin-bottom:8px;font-size:0.85rem;box-shadow:0 1px 4px rgba(46,42,34,0.06);}
+  .reg-item{background:var(--card-bg);border-left:3px solid var(--madera);border-radius:8px;padding:8px 11px;margin-bottom:8px;font-size:0.85rem;box-shadow:0 1px 4px rgba(43,59,54,0.06);}
   .reg-item .meta{display:flex;justify-content:space-between;gap:8px;font-size:0.72rem;opacity:0.6;margin-bottom:5px;}
   .reg-item .tag{display:inline-block;padding:2px 9px;border-radius:10px;font-size:0.68rem;font-weight:700;color:white;margin-right:7px;vertical-align:middle;}
   .tag.lvl-logro{background:var(--ok);}
@@ -328,18 +342,33 @@
   .reg-item .del, .tut-item .del{border:none;background:none;cursor:pointer;opacity:0.45;font-size:0.85rem;}
 
   .evid-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-top:12px;}
-  .evid-card{background:var(--card-bg);border-radius:10px;box-shadow:0 2px 8px rgba(46,42,34,0.08);overflow:hidden;position:relative;border:1px solid rgba(46,42,34,0.06);}
+  .evid-card{background:var(--card-bg);border-radius:10px;box-shadow:0 2px 8px rgba(43,59,54,0.08);overflow:hidden;position:relative;border:1px solid rgba(43,59,54,0.06);}
   .evid-card img{width:100%;height:110px;object-fit:cover;display:block;}
   .evid-card .placeholder{height:110px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;background:var(--paper);text-decoration:none;}
   .evid-card .info{padding:7px 9px;font-size:0.72rem;}
   .evid-card .info .d{opacity:0.55;margin-bottom:2px;}
-  .evid-card .del{position:absolute;top:5px;right:5px;background:rgba(36,53,47,0.55);color:white;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:0.72rem;line-height:1;}
+  .evid-card .del{position:absolute;top:5px;right:5px;background:rgba(30,43,39,0.55);color:white;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:0.72rem;line-height:1;}
 
-  .tut-item{background:var(--card-bg);border-left:3px solid var(--azul);border-radius:8px;padding:9px 11px;margin-bottom:8px;font-size:0.85rem;box-shadow:0 1px 4px rgba(46,42,34,0.06);}
+  .tut-item{background:var(--card-bg);border-left:3px solid var(--azul);border-radius:8px;padding:9px 11px;margin-bottom:8px;font-size:0.85rem;box-shadow:0 1px 4px rgba(43,59,54,0.06);}
   .tut-item .meta{font-size:0.72rem;opacity:0.6;margin-bottom:4px;}
 
-  .resumen-box{width:100%;min-height:260px;border:1px solid var(--paper-line);border-radius:10px;padding:14px;font-family:'Inter';font-size:0.85rem;white-space:pre-wrap;background:var(--card-bg);color:var(--ink);}
+  .resumen-box{width:100%;min-height:260px;border:1px solid var(--paper-line);border-radius:10px;padding:14px;font-family:var(--font-body);font-size:0.85rem;white-space:pre-wrap;background:var(--card-bg);color:var(--ink);}
   .alert-item.urgent{background:#FBDDD3;border-left-color:var(--coral);}
+
+  .cfg-area{background:var(--paper);border:1px solid var(--paper-line);border-radius:10px;padding:12px 14px;margin-bottom:12px;}
+  .cfg-area-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;}
+  .cfg-area-head input{flex:1;font-family:var(--font-display);font-weight:600;font-size:0.95rem;border:1px solid transparent;background:transparent;padding:4px 6px;border-radius:6px;color:var(--ink);}
+  .cfg-area-head input:hover, .cfg-area-head input:focus{border-color:var(--paper-line);background:var(--card-bg);}
+  .cfg-area-head .cfg-icon-btn{background:none;border:none;cursor:pointer;opacity:0.5;padding:4px;border-radius:6px;display:inline-flex;}
+  .cfg-area-head .cfg-icon-btn:hover{opacity:1;background:var(--card-bg);}
+  .cfg-ind-row{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid var(--paper-line);}
+  .cfg-ind-row:last-of-type{border-bottom:none;}
+  .cfg-ind-row textarea{flex:1;border:1px solid var(--paper-line);border-radius:7px;padding:6px 9px;font-family:var(--font-body);font-size:0.82rem;resize:vertical;min-height:38px;background:var(--card-bg);color:var(--ink);}
+  .cfg-ind-row button{background:none;border:none;cursor:pointer;opacity:0.45;flex-shrink:0;margin-top:6px;}
+  .cfg-ind-row button:hover{opacity:1;}
+  .cfg-add-ind{background:transparent;border:1.5px dashed var(--paper-line);color:var(--ink);opacity:0.7;border-radius:7px;padding:6px 12px;font-size:0.78rem;cursor:pointer;font-family:var(--font-body);margin-top:6px;}
+  .cfg-add-ind:hover{opacity:1;border-color:var(--madera);}
+  .cfg-save-bar{position:sticky;bottom:0;background:var(--card-bg);border-top:1px solid var(--paper-line);padding:10px 14px;margin:16px -18px -16px;border-radius:0 0 var(--radius) var(--radius);display:flex;justify-content:flex-end;gap:8px;}
 
   @media (max-width:600px){
     .wrap{padding:0 12px 40px;}
@@ -474,7 +503,7 @@
         </button>
         <div class="account-dropdown" id="accountDropdown">
           <div class="name" id="accountDropdownName">—</div>
-          <input type="text" id="accountNameEditInput" placeholder="Tu nombre" style="width:100%;margin:4px 0 8px;padding:6px 8px;border:1px solid var(--paper-line);border-radius:6px;font-family:'Inter';font-size:0.82rem;background:var(--card-bg);color:var(--ink);">
+          <input type="text" id="accountNameEditInput" placeholder="Tu nombre" style="width:100%;margin:4px 0 8px;padding:6px 8px;border:1px solid var(--paper-line);border-radius:6px;font-family:var(--font-body);font-size:0.82rem;background:var(--card-bg);color:var(--ink);">
           <div class="email" id="accountDropdownEmail"></div>
           <div class="especialidad" id="accountDropdownEspecialidad"></div>
           <div class="especialidad" id="accountDropdownAula" style="opacity:0.7;"></div>
@@ -500,6 +529,7 @@
       <button class="tab-btn" data-view="report">Informe</button>
       <button class="tab-btn" data-view="roster">Alumnado</button>
       <button class="tab-btn" data-view="registros">Cuaderno de registros</button>
+      <button class="tab-btn" data-view="config">Configuración</button>
     </div>
     <div class="day-nav">
       <button id="prevDay" class="btn-icon-label"><svg class="icon" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg> Anterior</button>
@@ -580,7 +610,7 @@
       </div>
       <div class="report-block">
         <h3 class="section-title">Evaluación por áreas e indicadores / observaciones individuales</h3>
-        <select id="reportChildSelect" style="margin-bottom:12px;padding:7px 10px;border:1px solid var(--paper-line);border-radius:8px;font-family:'Inter';"></select>
+        <select id="reportChildSelect" style="margin-bottom:12px;padding:7px 10px;border:1px solid var(--paper-line);border-radius:8px;font-family:var(--font-body);"></select>
         <div id="childReportOutput"></div>
       </div>
       <div class="report-block">
@@ -630,6 +660,57 @@
     </div>
   </div>
 
+  <!-- CONFIG VIEW -->
+  <div class="view" id="view-config">
+    <div class="toolbar">
+      <h2>Configuración</h2>
+    </div>
+
+    <div class="reg-subtabs" id="configSubtabs">
+      <button class="reg-subtab-btn active" data-sub="indicadores">📋 Áreas de conocimiento</button>
+      <button class="reg-subtab-btn" data-sub="alumnado">👧 Importar alumnado</button>
+    </div>
+
+    <!-- Sub: indicadores -->
+    <div class="reg-section active" id="config-sec-indicadores">
+      <div class="report-block">
+        <h3 class="section-title">Editar indicadores por edad</h3>
+        <div class="age-toggle" id="configAgeToggle" style="max-width:320px;margin-bottom:14px;">
+          <button class="sel" data-age="3">3 años</button>
+          <button data-age="4">4 años</button>
+          <button data-age="5">5 años</button>
+        </div>
+        <div id="configAreasList"></div>
+        <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-outline btn-icon-label" id="configAddAreaBtn"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg> Añadir área nueva</button>
+        </div>
+      </div>
+
+      <div class="report-block">
+        <h3 class="section-title">Sustituir el banco de indicadores de esta edad</h3>
+        <p style="font-size:0.85rem;opacity:0.75;margin:0 0 12px;">Sube un CSV para <strong>reemplazar por completo</strong> los indicadores de la edad seleccionada arriba. Se borrará lo que haya ahora para esa edad y se cargará lo del archivo.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <button class="btn btn-outline btn-icon-label" id="downloadIndicatorTemplateBtn"><svg class="icon" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg> Descargar plantilla CSV</button>
+          <button class="btn btn-add btn-icon-label" id="uploadIndicatorCsvBtn"><svg class="icon" viewBox="0 0 24 24"><path d="M12 21V9"/><path d="m7 14 5-5 5 5"/><path d="M4 20h16"/></svg> Subir CSV y reemplazar</button>
+          <input type="file" id="indicatorCsvFile" accept=".csv" style="display:none;">
+        </div>
+      </div>
+    </div>
+
+    <!-- Sub: alumnado -->
+    <div class="reg-section" id="config-sec-alumnado">
+      <div class="report-block">
+        <h3 class="section-title">Importar listado de alumnado por CSV</h3>
+        <p style="font-size:0.85rem;opacity:0.75;margin:0 0 12px;">Descarga la plantilla, rellénala con una fila por alumno/a (columnas: <strong>Nombre, Edad, Aula</strong>) y súbela aquí. Solo se importarán las filas cuya columna Aula coincida con el aula en la que estás ahora mismo — así evitamos mezclar listados de otras aulas por error. Los alumnos ya existentes con el mismo nombre se actualizarán en vez de duplicarse.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <button class="btn btn-outline btn-icon-label" id="downloadRosterTemplateBtn"><svg class="icon" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg> Descargar plantilla CSV</button>
+          <button class="btn btn-add btn-icon-label" id="uploadRosterCsvBtn"><svg class="icon" viewBox="0 0 24 24"><path d="M12 21V9"/><path d="m7 14 5-5 5 5"/><path d="M4 20h16"/></svg> Subir CSV de alumnado</button>
+          <input type="file" id="rosterCsvFile" accept=".csv" style="display:none;">
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="notice">Los datos se guardan compartidos: tú y tus compañeras veréis el mismo diario, rincones y registro.</div>
 </div>
 
@@ -658,7 +739,11 @@
 </div>
 
 <script>
-const INDICATOR_BANK = {"3": {"CRECIMIENTO EN ARMONÍA": ["Identifica y vivencia segmentos y elementos del propio cuerpo.", "Identifica algunas diferencias físicas entre su propio cuerpo y el de los demás.", "Coordina y controla progresivamente los movimientos en actividades manipulativas carácter fino.", "Identifica el sexo propio.", "Interpreta nociones direccionales con el cuerpo.", "Se desplaza por el espacio de forma cada vez más segura.", "Progresa en su autonomía.", "Desarrolla la coordinación óculo-motriz.", "Nombra los cinco sentidos.", "Es progresivamente autónomo en las actividades relacionadas con las rutinas escolares.", "Permanece en escucha atenta en periodos cortos de tiempo.", "Identifica grupos de alimentos a consumir en mayor o menor medida.", "Reconoce diferentes tipos de sabores.", "Coordina habilidades psicomotrices en la manipulación de alimentos y objetos relacionados con la alimentación."], "DESCUBRIMIENTO Y EXPLORACIÓN DEL ENTORNO": ["15. Dice características de las estaciones.", "16. Conoce algunas características de animales cercanos a ellos.", "17. Conoce la utilidad para el ser humano de algunos animales y plantas.", "18. Respeta y cuida los seres vivos.", "19. Conoce su vivienda.", "20. Identifica profesiones de su entorno próximo.", "21. Descubre lugares de ocio y diversión.", "22. Se relaciona con todos y hace amigos.", "23. Empieza a conocer algunas normas de seguridad vial.", "24. Se inicia en el conocimiento de algunos medios de transporte y de algunos medios de comunicación e información.", "25. Participa en actividades culturales.(Andalucía)", "26. Compartir, resolver conflictos.", "27. Reconoce formas planas.", "28. Utiliza la serie numérica.", "29. Asocia número cantidad.", "30. Discrimina tamaño objetos.", "31. Utiliza nociones básicas de orientación espacial.", "32. Respeta el turno en juegos y actividades y aceptar reglas para jugar.", "33. Respeta las normas de convivencia.", "34. Adquiere hábitos relacionados con la salud, la alimentación y el descanso."], "COMUNICACIÓN Y REPRESENTACIÓN DE LA REALIDAD": ["35. Se expresa cada vez mejor mediante el lenguaje oral.", "36. Aumenta progresivamente su vocabulario.", "37. Muestra interés por los textos de literatura infantil: cuentos clásicos, poemas, adivinanzas...leídos en clase.", "38. Lee e interpreta imágenes y pictogramas.", "39. Memoriza poesías, canciones y retahílas.", "40. Discrimina sonidos.", "41. Reconoce las vocales.", "42. Deletrea palabras", "43. Reconoce su propio nombre.", "43. Realiza trazos sencillos correctamente.", "44. Avanza en las técnicas plásticas (coloreado, pintura, rasgado, picado, recortado, modelado...)", "45. Valora obras de arte.", "46. Comprende órdenes sencillas", "47. Participa en danzas y dramatizaciones con agrado.", "48. Utiliza con confianza sus posibilidades motrices al desplazarse.", "49. Conoce, utiliza y valora algunos instrumentos tecnológicos.", "50. Participa en las actividades adecuadas a su edad.", "51. Muestra interés por el uso y conocimiento de las nuevas tecnologías.", "52. Respeta y cuida la pantalla y los diferentes elementos audiovisuales.", "53. Identifica los colores.", "54. participa en el baile de fin de curso"], "RELIGIÓN": ["54. Reconoce gestos o acciones de amor al prójimo: respetar, ayudar, compartir, acompañar.", "55. Sabe que compartir es dar, prestar, ayudar, regalar…", "56. Conoce el relato de los Reyes Magos y lo relaciona con el nacimiento de Jesús.", "57. Conoce, valora y respeta algunos signos del cristianismo en los lugares más conocidos, su sentido y su realidad.", "58. Conoce algunos valores humanos que poseen en su interior y que Jesucristo les enseña.", "59. Sabe compartir la alegría del amor que Dios nos tiene.", "60. Valora las enseñanzas que Jesús nos da para aprender a amar a los demás, y verlo como nuestro amigo.", "61. Aprende a hablar con Jesús y su madre María junto con los amigos y compañeros.", "62. Muestra alegría y agradecimiento por las muestras de amor que reciben"]}, "4": {"CRECIMIENTO EN ARMONÍA": ["Explora el propio cuerpo. Esquema corporal (1.1)", "Identifica y utiliza los sentidos, sensaciones y percepciones: discriminación auditiva y visual (1.1)", "Coordina habilidades psicomotrices en la manipulación de alimentos y objetos relacionados con la alimentación (1.1) (1.3)", "Coordina y controla, cada vez con mayor precisión, las habilidades manipulativas de carácter fino: grafomotricidad, trayectos, laberintos, pica, colorea, recorta, traza, pega, etc… (1.3) (2.3)", "Afianza su lateralidad: lateralidad ojo, mano, pie. Identifica la simetría en su propio cuerpo (1.1) ( 1.3)", "Controla, de forma progresiva, el tono y el equilibrio en los juegos y actividades (1.1) (1.4)", "Se reconoce como una persona diferenciada de los demás, valorando la diversidad (1.1) (2.4)", "Identifica algunas partes de nuestro cuerpo (1.1)", "Carece de estereotipos sexuales ligados a las profesiones (4.3)", "Posee una adecuada coordinación y control dinámico general del propio cuerpo (1.3)", "Interpreta nociones direccionales con el cuerpo (hacia arriba, hacia abajo, a un lado, a otro, hacia delante, hacia atrás, de espaldas, de lado, de frente…) (1.1) (1.3)", "Reconoce los cinco sentidos y sus funciones (1.1)", "Identifica algunos miembros de la familia (4.1) (4.3)", "Muestra autonomía progresiva en las diferentes actividades cotidianas utilizando adecuadamente los recursos (1.2) (4.2) (4.5) (3.4)", "Utiliza las propias posibilidades motrices, sensitivas y expresivas del propio cuerpo (2.1)", "Identifica, expresa, denomina sentimientos propios y ajenos: alegría, tristeza, enfado, miedo (2.1) (2.4)", "Incorpora progresivamente pautas adecuadas de comportamiento: compartir, ayudar, cooperar, resolver conflictos mediante el diálogo, etc. (2.2) (4.4) (4.5) (3.2)", "Pide ayuda cuando lo necesita e intenta resolver situaciones (2.2) (4.4)", "Identifica grupos de alimentos a consumir en mayor o menor medida (3.1) (3.3)", "Muestra interés y disposición favorable para establecer relaciones respetuosas, afectivas y recíprocas con niños y niñas de la misma cultura y de otras culturas diferentes (4.1) (4.3) y (4.6)", "Identifica y valora las propias características y las de los otros (4.3)", "Reconoce diferentes tipos de sabores (1.1)", "Sistema cerebelo-vestibular (Funciones simultáneas: Adelante y atrás. Caminata regular. Brazos extendidos) (1.1) (1.2)", "Coordinación motriz: (Realiza dos actividades coordinadas. No toca objetos. Fluidez de movimientos) (1.1)", "Coordinación ojo-mano Recibe la pelota más de 3 veces. Lanza intencionadamente. Encesto libre. Patrón cruzado) (1.1) (1.4)", "Seguimiento de instrucciones: (No necesita repeticiones. Ejecución regular) (1.2) (1.4)", "Seguimiento de instrucciones (Siempre realiza tres o más instrucciones orales siguiendo la secuencia dada) (1.4)", "Tolerancia al esfuerzo: Persiste hasta lograr su meta y pide ayuda si la necesita (3.2) (3.1)", "Respeta tiempos de silencio (Mantiene el silencio cuando se le solicita) (3.2)", "Respeta turnos (Sabe esperar sin frustración ni impulsividad. Hábito formado) (3.1) (3.3)", "Tolerancia a la frustración (Comunica su frustración de forma verbal o gestual. Pide ayuda si la necesita) (3.3)", "Planeación (Alinea su planeación del trabajo y organización de materiales, con tiempo para el ocio o actividades de ampliación) (3.2)", "Conoce y participa en los grupos sociales de los que forma parte (familia, colegio, barrio) (4.1) (4.3)"], "DESCUBRIMIENTO Y EXPLORACIÓN DEL ENTORNO": ["Manifiesta curiosidad, cuidado, respeto y valoración positiva de los elementos del medio natural (3.1)", "Reconoce características de las distintas estaciones del año (3.4) (1.5)", "Conoce las consecuencias del paso del tiempo en personas, animales y elementos del entorno. (3.3) (1.5).", "Reconoce los días de la semana (1.5)", "Observa los fenómenos del medio natural. (3.4)", "Conoce algunos cambios que se producen en la vida de las plantas, de las personas y de los animales (3.3)", "Conoce y se interesa por elementos de la naturaleza y de su comunidad autónoma (3.1) (3.3) (3.5)", "Clasifica alimentos según su procedencia (2.3) (3.5)", "Conoce los nombres y características de algunos animales y plantas sobre todo los de su comunidad autónoma (3.3) ( 3.5)", "Ayuda a elaborar normas de clase (2.4) (2.1)", "Se orienta y actúa autónomamente en espacios cotidianos: escuela, casa, etc. (1.5)", "Conoce los distintos espacios, elementos y mobiliario característicos de la casa y el colegio (1.5)", "Valora y conoce el trabajo y los servicios que algunos profesionales prestan a la comunidad (3.2)", "Reconoce características de los medios de transporte y los clasifica según el lugar por el que se desplaza, velocidad, tamaño, etc… (1.1) (1.2) (1.4)", "Conoce normas y modos de comportamiento social. Respeta las normas de convivencia (2.4) (2.6)", "Colabora en el juego compartido, respetando a los demás (2.6)", "Establece relaciones afectivas satisfactorias (2.2)", "Describe objetos y situaciones del entorno, sus características y propiedades (3.5)", "Reconoce alguna seña de identidad cultural del entorno («Día de la Paz», «Día del Libro», etc.). Interés por participar en actividades grupales (3.5) (3.4)", "Conoce y participa en fiestas, tradiciones y costumbres de Andalucía (3.5)", "Conoce distintos colores y tonalidades. (1.1)", "Establece clasificaciones y seriaciones de elementos atendiendo a distintas características (2.5)", "Utiliza conceptos para comparar tamaños y medidas (grande/mediano/pequeño, más grande/pequeño que…, bajo/alto, largo/corto, igual que) (1.4) (1.2)", "Utiliza cuantificadores. (Pocos/muchos, lleno/vacío, muchos/ninguno, mitad, igual, tantos como, más/menos) (1.2)", "Reconoce formas geométricas planas (cuadrado, círculo, triángulo, rectángulo, óvalo) (1.6) (1.7)", "Reconoce los cuerpos geométricos: cono, esfera y cubo (1.6) (1.7)", "Conoce y utiliza nociones de orientación en el espacio (encima de/debajo de, a un lado/a otro, delante/detrás, antes/después, junto/ separado, a través) (1.3) (1.5) (1.6)", "Utiliza la serie numérica (al menos hasta el 6) en situaciones de la vida cotidiana (1.8)", "Utiliza los tres primeros números ordinales y los utiliza en situaciones cotidianas (1.8)", "Resuelve sencillos problemas de la vida cotidiana (2.3)( 2.4)", "Compone y descompone números (hasta el 6) (1.8)", "Asocia cantidad y grafía en situaciones cotidianas (1.6) (1.8)", "Adquiere hábitos relacionados con la salud, la alimentación y el descanso (3.3) (2.3) (2.4)", "Orientación espacial (Identifica rápidamente arriba-abajo, dentro-fuera) (1.3)", "Memoria de transición simbólica (Nombra casi todos los números propuestos en 10”) (2.1)", "Secuencia de transición simbólica (Puede hacer composiciones y descomposiciones de 6 unidades) (1.8)", "Series lógicas (Construye series sencillas de 2 elementos y varios atributos (forma , tamaño y color) (1.6) (1.7)"], "COMUNICACIÓN Y REPRESENTACIÓN DE LA REALIDAD": ["Expresa sentimientos, deseos e ideas mediante el lenguaje oral (1.1) (1.2) (3.2)", "Utiliza un vocabulario cada vez más amplio con pronunciación correcta (1.1) (1.2)", "Comprende y reproduce algunos textos de tradición cultural andaluza (4.5)", "Lee, discrimina e interpreta imágenes, códigos, pictogramas y palabras (4.4) (4.2) (2.2)", "Comprende y reproduce cuentos, poesías…(4.2) (4.4) (4.5)", "Ordena temporalmente secuencias de un cuento (4.2)", "Utiliza las normas en los intercambios lingüísticos: escuchar, contestar, etc… (3.1) (5.2)", "Gusta de leer cuentos, cuidando la biblioteca y tratándolos respetuosamente (2.1) (2.3) (3.3) (5.3)", "Realiza distintos grafos siguiendo la direccionalidad correcta (4.1)", "Valora el lenguaje escrito como medio fundamental de comunicación (2.1) (4.1) (4.2) (4.3) (4.4) (4.5)", "Escribe su nombre, los días de la semana y palabras del vocabulario habitual (4.1)", "Reconoce el propio nombre y algunos de sus compañeros/as (4.1)", "Utiliza letras mayúsculas (4.2)", "Conoce y utiliza diferentes técnicas plásticas (3.4) (3.7)", "Conoce los colores básicos y la composición de los secundarios (3.4) (5.4) (5.5)", "Utiliza las técnicas básicas para realizar composiciones propias (5.5) (5.6)", "Gusto por investigar las posibilidades plásticas a través de las técnicas que conoce (5.5)(5.6)", "Identifica sonidos cotidianos y discrimina el de diferentes instrumentos musicales (5.4) (5.5) (5.6) (3.8) (3.5)", "Conoce distintos instrumentos musicales. Su uso y características (3.8) (3.5)", "Participa en diferentes actividades musicales: audiciones, interpretación de canciones, juegos musicales, danzas y folklore andaluz (2.4) (5.4) (3.6)", "Conoce la obra plástica y musical de diferentes artistas (5.6) (4.5)", "Gusto por la audición interesada de distintos estilos musicales. (5.5) (3.5) (5.1)", "Representa situaciones cotidianas a través del gesto y el movimiento (3.5) (3.6)", "Representa con gestos y muecas diferentes emociones o sentimientos (3.6) (5.4)", "Imita animales, objetos y a otras personas a través del cuerpo (3.6) (5.4)", "Participa con gusto en las actividades de danza, juego simbólico y otros (3.8)", "Muestra interés por comunicarse en lengua extranjera (1.1) (1.3) (5.2)", "Conoce, utiliza y valora algunos instrumentos tecnológicos (1.4)", "Gusto por el aprendizaje del manejo de las nuevas tecnologías (1.4) (1.3)", "Participa en las distintas actividades interactivas (1.4) (5.2)", "Respeta y cuida las herramientas mientras las está utilizando (1.5)", "Comprende órdenes sencillas (1.5)", "Participa en bailes (3.8) (3.6)", "Movimientos sacádicos (Movimientos sacádicos con 8 imágenes por 4 líneas. Movimientos regulares. Mantiene la atención en toda la secuencia) (1.4) (2.1)", "Atención visual (Identifica 6 ítems.) (2.1) (4.2)", "Memoria visual. 6 ítems: Evoca 5-6 ítems en 15” (2.1)", "Discriminación visual (Reconoce la mayoría de las diferencias. Tiempo 15”) (2.1) (2.2)", "Ergonomía de la escritura (Coge el lápiz con los dedos en pinza. Esfuerzo al escribir. Se acerca al papel) (3.4) (3.6)", "Psicomotricidad fina (Trazos no enlazados. Ubicación espacial. Presión regular. Cuerpo relajado) (3.6)", "Memoria visual de la forma (Reproduce las figuras del mismo tamaño y forma, orden orientación y ubicación. Con detalle. 10’’ .3 elementos (3.4) (3.7)"]}, "5": {"CRECIMIENTO EN ARMONÍA": ["Reconoce y nombra distintas partes del cuerpo (1.2)", "Identifica los sentidos y sus funciones (1.1)", "Reconoce la derecha y la izquierda (1.1) (1.2)", "Desarrolla sus habilidades motrices y manipulativas de carácter fino con precisión y fluidez (1.1) (1.3) (1.4)", "Persiste hasta lograr sus metas aprendiendo de sus errores y pidiendo ayuda (2.1) (2.2) (2.4)", "Expresa y nombra emociones y sentimientos, gustos y preferencias (2.1) (2.3)", "Identifica y conoce los grupos sociales más cercanos: la familia y el centro escolar (4.1) (4.3)", "Identifica el comercio correspondiente dónde se compran algunos alimentos (3.1) (3.2) (3.3) (4.1)", "Respeta las normas de seguridad en la calle y en los transportes(4.3) (4.1)", "Identifica profesiones y las respeta(4.3)", "Evidencia autonomía en la práctica de hábitos relacionados con la higiene, la alimentación, el vestido y el descanso (1.2) (2.2) (3.1) (3.2) (3.3)", "Respeta a los niños de otras culturas y se interesa por sus costumbres, bailes, comidas típicas, idioma (4.3)", "Muestra autonomía progresiva en las diferentes actividades cotidianas (1.2) (2.2)", "Identifica algunos medios de transporte (4.2) (4.5)", "Adquiere progresivamente hábitos de organización, atención, iniciativa y esfuerzo (2.1) (4.3) (4.5)", "Reconoce los nutrientes que aportan algunos alimentos y los clasifica (4.1) (4.5)", "Adquiere hábitos relacionados con la salud, la alimentación propia andaluza y el descanso (3.1) (4.1) (4.5) (4.6)", "Manifiesta habilidades de colaboración, generosidad, amistad, etc. (2.1)", "Participa activamente en distintos tipos de juegos (4.1)", "Respeta turnos y las normas que rigen los juegos (4.3)", "Pide ayuda cuando lo necesita e intenta resolver situaciones que se le presentan (2.2) (4.3) (4.4)", "Respeta las normas de seguridad. anticipa necesidades o riesgos (1.2)", "Previene accidentes (4.3)", "Participa y colabora en el mantenimiento de recursos y ambientes limpios y ordenados (4.5) (3.4)", "Asume responsabilidades adecuadas a su edad (4.4)", "Clasifica diversos alimentos en las distintas categorías de la pirámide alimenticia (3.3)", "Coordina habilidades psicomotrices en la manipulación de alimentos y objetos relacionados con la alimentación (1.1) (1.3)", "Presta atención a los compañeros/as de aula mostrando respeto (4.1)", "Sistema cerebelo-vestibular (Delante y atrás. Desplazamiento coordinado. Funciones simultáneas) (1.1) (1.2)", "Coordinación motriz: (Realiza dos actividades coordinadas. No toca objetos. Fluidez de movimientos) (1.1)", "Coordinación ojo-mano (Lanzamiento regular. Recibe la pelota. Encesta 3 a 2 m. Patrón cruzado) (1.1) (1.4)", "Seguimiento de instrucciones: (No necesita repeticiones. Ejecución regular, pero con esfuerzo) (1.2) (1.4)", "Seguimiento de instrucciones (Siempre realiza 3 instrucciones orales con 1 oración subordinada) (1.4)", "Tolerancia al esfuerzo (Persiste hasta lograr su meta. Aprende de los errores. Pide ayuda si lo necesita) (3.2) (3.1)", "Respeta tiempos de silencio (Mantiene el silencio cuando se le solicita) (3.2)", "Respeta turnos (Sabe esperar sin frustración ni impulsividad. Hábito formado) (3.1) (3.3)", "Tolerancia a la frustración (Verbaliza su frustración y se centra en las soluciones. Pide ayuda si la necesita) (3.3)", "Planeación (Planificación del trabajo y organización de materiales, con tiempo para el ocio o actividades de ampliación) (3.2)"], "DESCUBRIMIENTO Y EXPLORACIÓN DEL ENTORNO": ["Nombra las estaciones del año y sus características (1.5)", "Interpreta las nociones de orientación espacial (1.3.)", "Registra el tiempo atmosférico (3.4)", "Muestra una actitud relajada verbalizando su frustración y centrándose en las soluciones (2.2)", "Identifica y nombra plantas y animales, herbívoros y carnívoros, en distintos hábitats (3.2) (3.3)", "Conoce diferencias y semejanzas entre personas, animales y plantas (3.3)", "Reconoce la necesidad del reciclaje de residuos (3.2)", "Observa los cambios que se producen en el medio natural con el paso del tiempo (1.5)", "Manifiesta respeto y cuidado por plantas y animales (3.1)", "Realiza acciones que favorecen la conservación de la Naturaleza (3.2)", "Nombra diferentes alimentos (3.1) (3.3)", "Muestra habilidades sociales y resuelve conflictos (2.4)", "Participa en hechos culturales de su entorno (3.5) (3.4)", "Valora normas de comportamiento en actividades cotidianas, tanto en el colegio como en el entorno (3.2)", "Identifica y nombra propiedades de objetos: forma, color, tonalidades, tamaño, peso, estados (1.1) (1.4) (1.2)", "Agrupa, ordena y seria elementos y colecciones (2.6)", "Discrimina y compara magnitudes (1.1)", "Identifica nociones temporales: «ayer, hoy, mañana». «Mañana, tarde, noche» (1.5)", "Construye series con variables complejas de contenido simbólico (1.1)", "Ordena historietas (1.3)", "Identifica la cantidad y grafía de los 10 primeros números. Realiza sus grafías (1.8)", "Identifica los números ordinales hasta el 10º (1.8)", "Resuelve situaciones de cálculo; se inicia en la suma y en la resta. (2.1) (2.5) (2.3) (2.4)", "Registra la fecha en el calendario y ubica temporalmente actividades cotidianas (rutinas) (1.5)", "Nombra los días de la semana, meses del año, estaciones, etc. (3.4)", "Respeta las normas de convivencia (2.2)", "Identifica y realiza la grafía de los números del 0 al 10 (1.8)", "Reconoce los cuerpos geométricos: cilindro, semiesfera y pirámide (1.6) (1.7)", "Nombra distintos edificios representativos de la ciudad (3.4)", "Realiza sumas y restas sencillas (2.1) (2.3)", "Orientación espacial (Identifica rápidamente derecha-izquierda, arriba- abajo, entre, detrás, dentro) (1.3)", "Memoria de transición simbólica (Evoca casi todos los números propuestos. Tiempo: 10”) (2.1)", "Secuencia de transición simbólica (Con fichas puede hacer sumas y restas entre 10 y 20) (1.8)", "Series lógicas (Construye series con variables complejas de contenido simbólico) (1.6) (1.7)"], "COMUNICACIÓN Y REPRESENTACIÓN DE LA REALIDAD": ["Se expresa con claridad (1.1) (3.4) (5.2)", "Escucha y comprende mensajes, relatos, producciones literarias, descripciones..., que le permiten participar en la vida de la clase (1.1) (1.2) (2.1) (2.2)", "Discrimina el número de sílabas de las palabras (4.2)", "Discrimina sonidos parecidos (2.1) (2.2)", "Lee e interpreta imágenes, palabras, pictogramas y títulos de cuentos (4.4)", "Muestra interés por los actos de lectura (2.3) (3.3) (4.4)", "Representa la figura humana (3.4) (3.7)", "Utiliza la biblioteca y respeta los libros (4.1) (4.3) (4.4)", "Ordena temporal y espacialmente secuencias de un cuento (4.1) (4.2)", "Expresa sentimientos, ideas, deseos, mediante el lenguaje oral (1.1) (3.1) ( 3.2)", "Participa en situaciones comunicativas: asambleas, puestas en común, debates dirigidos, respetando las normas de convivencia (1.5) (3.1) (3.2) (5.6)", "Participa en diferentes situaciones de lectura presentes en el aula (4.4) (4.5)", "Muestra interés por el folklore andaluz y por sus costumbres (2.4) (4.5) (5.6)", "Muestra interés por producir trazos precisos,legibles y enlazados (4.1) (4.2)", "Manifiesta actitud positiva hacia la lengua extranjera (5.1) (5.2)(1.3)", "Se expresa a través de obras plásticas (2.2) (3.4) (3.7)", "Reproduce figuras de igual tamaño, orden y ubicación (4.1) (3.4) ( 3.7)", "Identifica las tonalidades clara y oscura de los colores(2.2) (3.4)", "Utiliza diversas técnicas y materiales y disfruta con ellas(2.2) (3.4) (3.7)", "Observa y describe obras de arte (3.1) (3.2) (5.5)", "Identifica la fuente de producción de algunos sonidos y de instrumentos musicales (3.5) (3.8)", "Disfruta del canto y la danza siguiendo el ritmo (3.5) (3.8)", "Presta atención a las audiciones y disfruta con ellas (3.8)", "Se expresa a través del cuerpo y de los movimientos (3.5) (3.6)", "Participa en las dramatizaciones y las danzas con agrado (3.5) (3.6) (3.8) (5.5)", "Conoce y utiliza algunos medios audiovisuales y tecnológicos (1.4)", "Identifica el funcionamiento adecuado de la P.D.I. (1.4)", "Distingue entre realidad y ficción (3.7) (4.5) (5.3)", "Hace un uso moderado de los medios y las tecnologías (1.4)", "Disfruta por el aprendizaje de las nuevas tecnologías (1.4)", "Manifiesta una actitud positiva con las nuevas tecnologías (1.4)", "Respeta y utiliza como es debido los medios audiovisuales (1.4)", "Memoriza el abecedario (3.4) (4.1) (5.2)", "Aumenta progresivamente su vocabulario (1.1) (1.2) (1.3)", "Lee frases sencillas que contienen las consonantes dadas (4.1) (4.2) (4.4)", "Realiza la grafía de las consonantes dadas (4.1) (4.2)", "Memoriza y reproduce canciones (5.1) (5.4)", "Movimientos sacádicos ( tipografía 14) (Movimientos regulares. Mantiene la atención en toda la secuencia) (1.4) (2.1)", "Atención visual (Identifica 13-16 ítems) (2.1) (4.2)", "Memoria visual ( Recuerda todos los ítems en 10”)(2.1)", "Discriminación visual(Reconoce la mayoria de las diferencias en 10”) (2.1) (2.2)", "Ergonomía de la escritura (Coge el lápiz con los dedos índice y pulgar en forma de pinza. Postura OK) (3.4) (3.6)", "Psicomotricidad fina (Cuerpo relajado. Presión adecuada al escribir. Trazos enlazados. Ubicación espacial) (3.6)", "Memoria visual de la forma (reproduce las figuras del mismo tamaño, orden y ubicación en 10”) (3.4) (3.7)"]}};
+const INDICATOR_BANK_DEFAULT = {"3": {"CRECIMIENTO EN ARMONÍA": ["Identifica y vivencia segmentos y elementos del propio cuerpo.", "Identifica algunas diferencias físicas entre su propio cuerpo y el de los demás.", "Coordina y controla progresivamente los movimientos en actividades manipulativas carácter fino.", "Identifica el sexo propio.", "Interpreta nociones direccionales con el cuerpo.", "Se desplaza por el espacio de forma cada vez más segura.", "Progresa en su autonomía.", "Desarrolla la coordinación óculo-motriz.", "Nombra los cinco sentidos.", "Es progresivamente autónomo en las actividades relacionadas con las rutinas escolares.", "Permanece en escucha atenta en periodos cortos de tiempo.", "Identifica grupos de alimentos a consumir en mayor o menor medida.", "Reconoce diferentes tipos de sabores.", "Coordina habilidades psicomotrices en la manipulación de alimentos y objetos relacionados con la alimentación."], "DESCUBRIMIENTO Y EXPLORACIÓN DEL ENTORNO": ["15. Dice características de las estaciones.", "16. Conoce algunas características de animales cercanos a ellos.", "17. Conoce la utilidad para el ser humano de algunos animales y plantas.", "18. Respeta y cuida los seres vivos.", "19. Conoce su vivienda.", "20. Identifica profesiones de su entorno próximo.", "21. Descubre lugares de ocio y diversión.", "22. Se relaciona con todos y hace amigos.", "23. Empieza a conocer algunas normas de seguridad vial.", "24. Se inicia en el conocimiento de algunos medios de transporte y de algunos medios de comunicación e información.", "25. Participa en actividades culturales.(Andalucía)", "26. Compartir, resolver conflictos.", "27. Reconoce formas planas.", "28. Utiliza la serie numérica.", "29. Asocia número cantidad.", "30. Discrimina tamaño objetos.", "31. Utiliza nociones básicas de orientación espacial.", "32. Respeta el turno en juegos y actividades y aceptar reglas para jugar.", "33. Respeta las normas de convivencia.", "34. Adquiere hábitos relacionados con la salud, la alimentación y el descanso."], "COMUNICACIÓN Y REPRESENTACIÓN DE LA REALIDAD": ["35. Se expresa cada vez mejor mediante el lenguaje oral.", "36. Aumenta progresivamente su vocabulario.", "37. Muestra interés por los textos de literatura infantil: cuentos clásicos, poemas, adivinanzas...leídos en clase.", "38. Lee e interpreta imágenes y pictogramas.", "39. Memoriza poesías, canciones y retahílas.", "40. Discrimina sonidos.", "41. Reconoce las vocales.", "42. Deletrea palabras", "43. Reconoce su propio nombre.", "43. Realiza trazos sencillos correctamente.", "44. Avanza en las técnicas plásticas (coloreado, pintura, rasgado, picado, recortado, modelado...)", "45. Valora obras de arte.", "46. Comprende órdenes sencillas", "47. Participa en danzas y dramatizaciones con agrado.", "48. Utiliza con confianza sus posibilidades motrices al desplazarse.", "49. Conoce, utiliza y valora algunos instrumentos tecnológicos.", "50. Participa en las actividades adecuadas a su edad.", "51. Muestra interés por el uso y conocimiento de las nuevas tecnologías.", "52. Respeta y cuida la pantalla y los diferentes elementos audiovisuales.", "53. Identifica los colores.", "54. participa en el baile de fin de curso"], "RELIGIÓN": ["54. Reconoce gestos o acciones de amor al prójimo: respetar, ayudar, compartir, acompañar.", "55. Sabe que compartir es dar, prestar, ayudar, regalar…", "56. Conoce el relato de los Reyes Magos y lo relaciona con el nacimiento de Jesús.", "57. Conoce, valora y respeta algunos signos del cristianismo en los lugares más conocidos, su sentido y su realidad.", "58. Conoce algunos valores humanos que poseen en su interior y que Jesucristo les enseña.", "59. Sabe compartir la alegría del amor que Dios nos tiene.", "60. Valora las enseñanzas que Jesús nos da para aprender a amar a los demás, y verlo como nuestro amigo.", "61. Aprende a hablar con Jesús y su madre María junto con los amigos y compañeros.", "62. Muestra alegría y agradecimiento por las muestras de amor que reciben"]}, "4": {"CRECIMIENTO EN ARMONÍA": ["Explora el propio cuerpo. Esquema corporal (1.1)", "Identifica y utiliza los sentidos, sensaciones y percepciones: discriminación auditiva y visual (1.1)", "Coordina habilidades psicomotrices en la manipulación de alimentos y objetos relacionados con la alimentación (1.1) (1.3)", "Coordina y controla, cada vez con mayor precisión, las habilidades manipulativas de carácter fino: grafomotricidad, trayectos, laberintos, pica, colorea, recorta, traza, pega, etc… (1.3) (2.3)", "Afianza su lateralidad: lateralidad ojo, mano, pie. Identifica la simetría en su propio cuerpo (1.1) ( 1.3)", "Controla, de forma progresiva, el tono y el equilibrio en los juegos y actividades (1.1) (1.4)", "Se reconoce como una persona diferenciada de los demás, valorando la diversidad (1.1) (2.4)", "Identifica algunas partes de nuestro cuerpo (1.1)", "Carece de estereotipos sexuales ligados a las profesiones (4.3)", "Posee una adecuada coordinación y control dinámico general del propio cuerpo (1.3)", "Interpreta nociones direccionales con el cuerpo (hacia arriba, hacia abajo, a un lado, a otro, hacia delante, hacia atrás, de espaldas, de lado, de frente…) (1.1) (1.3)", "Reconoce los cinco sentidos y sus funciones (1.1)", "Identifica algunos miembros de la familia (4.1) (4.3)", "Muestra autonomía progresiva en las diferentes actividades cotidianas utilizando adecuadamente los recursos (1.2) (4.2) (4.5) (3.4)", "Utiliza las propias posibilidades motrices, sensitivas y expresivas del propio cuerpo (2.1)", "Identifica, expresa, denomina sentimientos propios y ajenos: alegría, tristeza, enfado, miedo (2.1) (2.4)", "Incorpora progresivamente pautas adecuadas de comportamiento: compartir, ayudar, cooperar, resolver conflictos mediante el diálogo, etc. (2.2) (4.4) (4.5) (3.2)", "Pide ayuda cuando lo necesita e intenta resolver situaciones (2.2) (4.4)", "Identifica grupos de alimentos a consumir en mayor o menor medida (3.1) (3.3)", "Muestra interés y disposición favorable para establecer relaciones respetuosas, afectivas y recíprocas con niños y niñas de la misma cultura y de otras culturas diferentes (4.1) (4.3) y (4.6)", "Identifica y valora las propias características y las de los otros (4.3)", "Reconoce diferentes tipos de sabores (1.1)", "Sistema cerebelo-vestibular (Funciones simultáneas: Adelante y atrás. Caminata regular. Brazos extendidos) (1.1) (1.2)", "Coordinación motriz: (Realiza dos actividades coordinadas. No toca objetos. Fluidez de movimientos) (1.1)", "Coordinación ojo-mano Recibe la pelota más de 3 veces. Lanza intencionadamente. Encesto libre. Patrón cruzado) (1.1) (1.4)", "Seguimiento de instrucciones: (No necesita repeticiones. Ejecución regular) (1.2) (1.4)", "Seguimiento de instrucciones (Siempre realiza tres o más instrucciones orales siguiendo la secuencia dada) (1.4)", "Tolerancia al esfuerzo: Persiste hasta lograr su meta y pide ayuda si la necesita (3.2) (3.1)", "Respeta tiempos de silencio (Mantiene el silencio cuando se le solicita) (3.2)", "Respeta turnos (Sabe esperar sin frustración ni impulsividad. Hábito formado) (3.1) (3.3)", "Tolerancia a la frustración (Comunica su frustración de forma verbal o gestual. Pide ayuda si la necesita) (3.3)", "Planeación (Alinea su planeación del trabajo y organización de materiales, con tiempo para el ocio o actividades de ampliación) (3.2)", "Conoce y participa en los grupos sociales de los que forma parte (familia, colegio, barrio) (4.1) (4.3)"], "DESCUBRIMIENTO Y EXPLORACIÓN DEL ENTORNO": ["Manifiesta curiosidad, cuidado, respeto y valoración positiva de los elementos del medio natural (3.1)", "Reconoce características de las distintas estaciones del año (3.4) (1.5)", "Conoce las consecuencias del paso del tiempo en personas, animales y elementos del entorno. (3.3) (1.5).", "Reconoce los días de la semana (1.5)", "Observa los fenómenos del medio natural. (3.4)", "Conoce algunos cambios que se producen en la vida de las plantas, de las personas y de los animales (3.3)", "Conoce y se interesa por elementos de la naturaleza y de su comunidad autónoma (3.1) (3.3) (3.5)", "Clasifica alimentos según su procedencia (2.3) (3.5)", "Conoce los nombres y características de algunos animales y plantas sobre todo los de su comunidad autónoma (3.3) ( 3.5)", "Ayuda a elaborar normas de clase (2.4) (2.1)", "Se orienta y actúa autónomamente en espacios cotidianos: escuela, casa, etc. (1.5)", "Conoce los distintos espacios, elementos y mobiliario característicos de la casa y el colegio (1.5)", "Valora y conoce el trabajo y los servicios que algunos profesionales prestan a la comunidad (3.2)", "Reconoce características de los medios de transporte y los clasifica según el lugar por el que se desplaza, velocidad, tamaño, etc… (1.1) (1.2) (1.4)", "Conoce normas y modos de comportamiento social. Respeta las normas de convivencia (2.4) (2.6)", "Colabora en el juego compartido, respetando a los demás (2.6)", "Establece relaciones afectivas satisfactorias (2.2)", "Describe objetos y situaciones del entorno, sus características y propiedades (3.5)", "Reconoce alguna seña de identidad cultural del entorno («Día de la Paz», «Día del Libro», etc.). Interés por participar en actividades grupales (3.5) (3.4)", "Conoce y participa en fiestas, tradiciones y costumbres de Andalucía (3.5)", "Conoce distintos colores y tonalidades. (1.1)", "Establece clasificaciones y seriaciones de elementos atendiendo a distintas características (2.5)", "Utiliza conceptos para comparar tamaños y medidas (grande/mediano/pequeño, más grande/pequeño que…, bajo/alto, largo/corto, igual que) (1.4) (1.2)", "Utiliza cuantificadores. (Pocos/muchos, lleno/vacío, muchos/ninguno, mitad, igual, tantos como, más/menos) (1.2)", "Reconoce formas geométricas planas (cuadrado, círculo, triángulo, rectángulo, óvalo) (1.6) (1.7)", "Reconoce los cuerpos geométricos: cono, esfera y cubo (1.6) (1.7)", "Conoce y utiliza nociones de orientación en el espacio (encima de/debajo de, a un lado/a otro, delante/detrás, antes/después, junto/ separado, a través) (1.3) (1.5) (1.6)", "Utiliza la serie numérica (al menos hasta el 6) en situaciones de la vida cotidiana (1.8)", "Utiliza los tres primeros números ordinales y los utiliza en situaciones cotidianas (1.8)", "Resuelve sencillos problemas de la vida cotidiana (2.3)( 2.4)", "Compone y descompone números (hasta el 6) (1.8)", "Asocia cantidad y grafía en situaciones cotidianas (1.6) (1.8)", "Adquiere hábitos relacionados con la salud, la alimentación y el descanso (3.3) (2.3) (2.4)", "Orientación espacial (Identifica rápidamente arriba-abajo, dentro-fuera) (1.3)", "Memoria de transición simbólica (Nombra casi todos los números propuestos en 10”) (2.1)", "Secuencia de transición simbólica (Puede hacer composiciones y descomposiciones de 6 unidades) (1.8)", "Series lógicas (Construye series sencillas de 2 elementos y varios atributos (forma , tamaño y color) (1.6) (1.7)"], "COMUNICACIÓN Y REPRESENTACIÓN DE LA REALIDAD": ["Expresa sentimientos, deseos e ideas mediante el lenguaje oral (1.1) (1.2) (3.2)", "Utiliza un vocabulario cada vez más amplio con pronunciación correcta (1.1) (1.2)", "Comprende y reproduce algunos textos de tradición cultural andaluza (4.5)", "Lee, discrimina e interpreta imágenes, códigos, pictogramas y palabras (4.4) (4.2) (2.2)", "Comprende y reproduce cuentos, poesías…(4.2) (4.4) (4.5)", "Ordena temporalmente secuencias de un cuento (4.2)", "Utiliza las normas en los intercambios lingüísticos: escuchar, contestar, etc… (3.1) (5.2)", "Gusta de leer cuentos, cuidando la biblioteca y tratándolos respetuosamente (2.1) (2.3) (3.3) (5.3)", "Realiza distintos grafos siguiendo la direccionalidad correcta (4.1)", "Valora el lenguaje escrito como medio fundamental de comunicación (2.1) (4.1) (4.2) (4.3) (4.4) (4.5)", "Escribe su nombre, los días de la semana y palabras del vocabulario habitual (4.1)", "Reconoce el propio nombre y algunos de sus compañeros/as (4.1)", "Utiliza letras mayúsculas (4.2)", "Conoce y utiliza diferentes técnicas plásticas (3.4) (3.7)", "Conoce los colores básicos y la composición de los secundarios (3.4) (5.4) (5.5)", "Utiliza las técnicas básicas para realizar composiciones propias (5.5) (5.6)", "Gusto por investigar las posibilidades plásticas a través de las técnicas que conoce (5.5)(5.6)", "Identifica sonidos cotidianos y discrimina el de diferentes instrumentos musicales (5.4) (5.5) (5.6) (3.8) (3.5)", "Conoce distintos instrumentos musicales. Su uso y características (3.8) (3.5)", "Participa en diferentes actividades musicales: audiciones, interpretación de canciones, juegos musicales, danzas y folklore andaluz (2.4) (5.4) (3.6)", "Conoce la obra plástica y musical de diferentes artistas (5.6) (4.5)", "Gusto por la audición interesada de distintos estilos musicales. (5.5) (3.5) (5.1)", "Representa situaciones cotidianas a través del gesto y el movimiento (3.5) (3.6)", "Representa con gestos y muecas diferentes emociones o sentimientos (3.6) (5.4)", "Imita animales, objetos y a otras personas a través del cuerpo (3.6) (5.4)", "Participa con gusto en las actividades de danza, juego simbólico y otros (3.8)", "Muestra interés por comunicarse en lengua extranjera (1.1) (1.3) (5.2)", "Conoce, utiliza y valora algunos instrumentos tecnológicos (1.4)", "Gusto por el aprendizaje del manejo de las nuevas tecnologías (1.4) (1.3)", "Participa en las distintas actividades interactivas (1.4) (5.2)", "Respeta y cuida las herramientas mientras las está utilizando (1.5)", "Comprende órdenes sencillas (1.5)", "Participa en bailes (3.8) (3.6)", "Movimientos sacádicos (Movimientos sacádicos con 8 imágenes por 4 líneas. Movimientos regulares. Mantiene la atención en toda la secuencia) (1.4) (2.1)", "Atención visual (Identifica 6 ítems.) (2.1) (4.2)", "Memoria visual. 6 ítems: Evoca 5-6 ítems en 15” (2.1)", "Discriminación visual (Reconoce la mayoría de las diferencias. Tiempo 15”) (2.1) (2.2)", "Ergonomía de la escritura (Coge el lápiz con los dedos en pinza. Esfuerzo al escribir. Se acerca al papel) (3.4) (3.6)", "Psicomotricidad fina (Trazos no enlazados. Ubicación espacial. Presión regular. Cuerpo relajado) (3.6)", "Memoria visual de la forma (Reproduce las figuras del mismo tamaño y forma, orden orientación y ubicación. Con detalle. 10’’ .3 elementos (3.4) (3.7)"]}, "5": {"CRECIMIENTO EN ARMONÍA": ["Reconoce y nombra distintas partes del cuerpo (1.2)", "Identifica los sentidos y sus funciones (1.1)", "Reconoce la derecha y la izquierda (1.1) (1.2)", "Desarrolla sus habilidades motrices y manipulativas de carácter fino con precisión y fluidez (1.1) (1.3) (1.4)", "Persiste hasta lograr sus metas aprendiendo de sus errores y pidiendo ayuda (2.1) (2.2) (2.4)", "Expresa y nombra emociones y sentimientos, gustos y preferencias (2.1) (2.3)", "Identifica y conoce los grupos sociales más cercanos: la familia y el centro escolar (4.1) (4.3)", "Identifica el comercio correspondiente dónde se compran algunos alimentos (3.1) (3.2) (3.3) (4.1)", "Respeta las normas de seguridad en la calle y en los transportes(4.3) (4.1)", "Identifica profesiones y las respeta(4.3)", "Evidencia autonomía en la práctica de hábitos relacionados con la higiene, la alimentación, el vestido y el descanso (1.2) (2.2) (3.1) (3.2) (3.3)", "Respeta a los niños de otras culturas y se interesa por sus costumbres, bailes, comidas típicas, idioma (4.3)", "Muestra autonomía progresiva en las diferentes actividades cotidianas (1.2) (2.2)", "Identifica algunos medios de transporte (4.2) (4.5)", "Adquiere progresivamente hábitos de organización, atención, iniciativa y esfuerzo (2.1) (4.3) (4.5)", "Reconoce los nutrientes que aportan algunos alimentos y los clasifica (4.1) (4.5)", "Adquiere hábitos relacionados con la salud, la alimentación propia andaluza y el descanso (3.1) (4.1) (4.5) (4.6)", "Manifiesta habilidades de colaboración, generosidad, amistad, etc. (2.1)", "Participa activamente en distintos tipos de juegos (4.1)", "Respeta turnos y las normas que rigen los juegos (4.3)", "Pide ayuda cuando lo necesita e intenta resolver situaciones que se le presentan (2.2) (4.3) (4.4)", "Respeta las normas de seguridad. anticipa necesidades o riesgos (1.2)", "Previene accidentes (4.3)", "Participa y colabora en el mantenimiento de recursos y ambientes limpios y ordenados (4.5) (3.4)", "Asume responsabilidades adecuadas a su edad (4.4)", "Clasifica diversos alimentos en las distintas categorías de la pirámide alimenticia (3.3)", "Coordina habilidades psicomotrices en la manipulación de alimentos y objetos relacionados con la alimentación (1.1) (1.3)", "Presta atención a los compañeros/as de aula mostrando respeto (4.1)", "Sistema cerebelo-vestibular (Delante y atrás. Desplazamiento coordinado. Funciones simultáneas) (1.1) (1.2)", "Coordinación motriz: (Realiza dos actividades coordinadas. No toca objetos. Fluidez de movimientos) (1.1)", "Coordinación ojo-mano (Lanzamiento regular. Recibe la pelota. Encesta 3 a 2 m. Patrón cruzado) (1.1) (1.4)", "Seguimiento de instrucciones: (No necesita repeticiones. Ejecución regular, pero con esfuerzo) (1.2) (1.4)", "Seguimiento de instrucciones (Siempre realiza 3 instrucciones orales con 1 oración subordinada) (1.4)", "Tolerancia al esfuerzo (Persiste hasta lograr su meta. Aprende de los errores. Pide ayuda si lo necesita) (3.2) (3.1)", "Respeta tiempos de silencio (Mantiene el silencio cuando se le solicita) (3.2)", "Respeta turnos (Sabe esperar sin frustración ni impulsividad. Hábito formado) (3.1) (3.3)", "Tolerancia a la frustración (Verbaliza su frustración y se centra en las soluciones. Pide ayuda si la necesita) (3.3)", "Planeación (Planificación del trabajo y organización de materiales, con tiempo para el ocio o actividades de ampliación) (3.2)"], "DESCUBRIMIENTO Y EXPLORACIÓN DEL ENTORNO": ["Nombra las estaciones del año y sus características (1.5)", "Interpreta las nociones de orientación espacial (1.3.)", "Registra el tiempo atmosférico (3.4)", "Muestra una actitud relajada verbalizando su frustración y centrándose en las soluciones (2.2)", "Identifica y nombra plantas y animales, herbívoros y carnívoros, en distintos hábitats (3.2) (3.3)", "Conoce diferencias y semejanzas entre personas, animales y plantas (3.3)", "Reconoce la necesidad del reciclaje de residuos (3.2)", "Observa los cambios que se producen en el medio natural con el paso del tiempo (1.5)", "Manifiesta respeto y cuidado por plantas y animales (3.1)", "Realiza acciones que favorecen la conservación de la Naturaleza (3.2)", "Nombra diferentes alimentos (3.1) (3.3)", "Muestra habilidades sociales y resuelve conflictos (2.4)", "Participa en hechos culturales de su entorno (3.5) (3.4)", "Valora normas de comportamiento en actividades cotidianas, tanto en el colegio como en el entorno (3.2)", "Identifica y nombra propiedades de objetos: forma, color, tonalidades, tamaño, peso, estados (1.1) (1.4) (1.2)", "Agrupa, ordena y seria elementos y colecciones (2.6)", "Discrimina y compara magnitudes (1.1)", "Identifica nociones temporales: «ayer, hoy, mañana». «Mañana, tarde, noche» (1.5)", "Construye series con variables complejas de contenido simbólico (1.1)", "Ordena historietas (1.3)", "Identifica la cantidad y grafía de los 10 primeros números. Realiza sus grafías (1.8)", "Identifica los números ordinales hasta el 10º (1.8)", "Resuelve situaciones de cálculo; se inicia en la suma y en la resta. (2.1) (2.5) (2.3) (2.4)", "Registra la fecha en el calendario y ubica temporalmente actividades cotidianas (rutinas) (1.5)", "Nombra los días de la semana, meses del año, estaciones, etc. (3.4)", "Respeta las normas de convivencia (2.2)", "Identifica y realiza la grafía de los números del 0 al 10 (1.8)", "Reconoce los cuerpos geométricos: cilindro, semiesfera y pirámide (1.6) (1.7)", "Nombra distintos edificios representativos de la ciudad (3.4)", "Realiza sumas y restas sencillas (2.1) (2.3)", "Orientación espacial (Identifica rápidamente derecha-izquierda, arriba- abajo, entre, detrás, dentro) (1.3)", "Memoria de transición simbólica (Evoca casi todos los números propuestos. Tiempo: 10”) (2.1)", "Secuencia de transición simbólica (Con fichas puede hacer sumas y restas entre 10 y 20) (1.8)", "Series lógicas (Construye series con variables complejas de contenido simbólico) (1.6) (1.7)"], "COMUNICACIÓN Y REPRESENTACIÓN DE LA REALIDAD": ["Se expresa con claridad (1.1) (3.4) (5.2)", "Escucha y comprende mensajes, relatos, producciones literarias, descripciones..., que le permiten participar en la vida de la clase (1.1) (1.2) (2.1) (2.2)", "Discrimina el número de sílabas de las palabras (4.2)", "Discrimina sonidos parecidos (2.1) (2.2)", "Lee e interpreta imágenes, palabras, pictogramas y títulos de cuentos (4.4)", "Muestra interés por los actos de lectura (2.3) (3.3) (4.4)", "Representa la figura humana (3.4) (3.7)", "Utiliza la biblioteca y respeta los libros (4.1) (4.3) (4.4)", "Ordena temporal y espacialmente secuencias de un cuento (4.1) (4.2)", "Expresa sentimientos, ideas, deseos, mediante el lenguaje oral (1.1) (3.1) ( 3.2)", "Participa en situaciones comunicativas: asambleas, puestas en común, debates dirigidos, respetando las normas de convivencia (1.5) (3.1) (3.2) (5.6)", "Participa en diferentes situaciones de lectura presentes en el aula (4.4) (4.5)", "Muestra interés por el folklore andaluz y por sus costumbres (2.4) (4.5) (5.6)", "Muestra interés por producir trazos precisos,legibles y enlazados (4.1) (4.2)", "Manifiesta actitud positiva hacia la lengua extranjera (5.1) (5.2)(1.3)", "Se expresa a través de obras plásticas (2.2) (3.4) (3.7)", "Reproduce figuras de igual tamaño, orden y ubicación (4.1) (3.4) ( 3.7)", "Identifica las tonalidades clara y oscura de los colores(2.2) (3.4)", "Utiliza diversas técnicas y materiales y disfruta con ellas(2.2) (3.4) (3.7)", "Observa y describe obras de arte (3.1) (3.2) (5.5)", "Identifica la fuente de producción de algunos sonidos y de instrumentos musicales (3.5) (3.8)", "Disfruta del canto y la danza siguiendo el ritmo (3.5) (3.8)", "Presta atención a las audiciones y disfruta con ellas (3.8)", "Se expresa a través del cuerpo y de los movimientos (3.5) (3.6)", "Participa en las dramatizaciones y las danzas con agrado (3.5) (3.6) (3.8) (5.5)", "Conoce y utiliza algunos medios audiovisuales y tecnológicos (1.4)", "Identifica el funcionamiento adecuado de la P.D.I. (1.4)", "Distingue entre realidad y ficción (3.7) (4.5) (5.3)", "Hace un uso moderado de los medios y las tecnologías (1.4)", "Disfruta por el aprendizaje de las nuevas tecnologías (1.4)", "Manifiesta una actitud positiva con las nuevas tecnologías (1.4)", "Respeta y utiliza como es debido los medios audiovisuales (1.4)", "Memoriza el abecedario (3.4) (4.1) (5.2)", "Aumenta progresivamente su vocabulario (1.1) (1.2) (1.3)", "Lee frases sencillas que contienen las consonantes dadas (4.1) (4.2) (4.4)", "Realiza la grafía de las consonantes dadas (4.1) (4.2)", "Memoriza y reproduce canciones (5.1) (5.4)", "Movimientos sacádicos ( tipografía 14) (Movimientos regulares. Mantiene la atención en toda la secuencia) (1.4) (2.1)", "Atención visual (Identifica 13-16 ítems) (2.1) (4.2)", "Memoria visual ( Recuerda todos los ítems en 10”)(2.1)", "Discriminación visual(Reconoce la mayoria de las diferencias en 10”) (2.1) (2.2)", "Ergonomía de la escritura (Coge el lápiz con los dedos índice y pulgar en forma de pinza. Postura OK) (3.4) (3.6)", "Psicomotricidad fina (Cuerpo relajado. Presión adecuada al escribir. Trazos enlazados. Ubicación espacial) (3.6)", "Memoria visual de la forma (reproduce las figuras del mismo tamaño, orden y ubicación en 10”) (3.4) (3.7)"]}};
+
+// El banco de indicadores puede ser personalizado por cada aula desde Configuración.
+// Empieza con los valores de fábrica y se sustituye, si existe, por la versión guardada en Supabase.
+let INDICATOR_BANK = JSON.parse(JSON.stringify(INDICATOR_BANK_DEFAULT));
 
 function buildIndicatorAreaLookup(){
   const lookup = {};
@@ -670,7 +755,23 @@ function buildIndicatorAreaLookup(){
   });
   return lookup;
 }
-const INDICATOR_AREA_LOOKUP = buildIndicatorAreaLookup();
+let INDICATOR_AREA_LOOKUP = buildIndicatorAreaLookup();
+
+async function loadIndicatorBank(){
+  try{
+    const res = await window.storage.get('indicator-bank-config', true);
+    if(res && res.value){
+      const parsed = JSON.parse(res.value);
+      if(parsed && typeof parsed === 'object'){ INDICATOR_BANK = parsed; }
+    }
+  }catch(e){ console.error('Error cargando banco de indicadores personalizado', e); }
+  INDICATOR_AREA_LOOKUP = buildIndicatorAreaLookup();
+}
+async function saveIndicatorBank(){
+  try{ await window.storage.set('indicator-bank-config', JSON.stringify(INDICATOR_BANK), true); }
+  catch(e){ console.error('Error guardando banco de indicadores', e); }
+  INDICATOR_AREA_LOOKUP = buildIndicatorAreaLookup();
+}
 function flattenIndicators(rincon){
   const out = [];
   ['3','4','5'].forEach(age=>{
@@ -1043,6 +1144,9 @@ function setupRealtime(){
         if(currentView === 'day') render();
         if(currentView === 'week') await renderWeek();
         if(currentView === 'roster') renderRosterEdit();
+      } else if(key === 'indicator-bank-config'){
+        await loadIndicatorBank();
+        if(currentView === 'config') renderConfigView();
       } else if(key && key.indexOf('dia:') === 0){
         if(key === 'dia:' + fmtDate(currentDate)){
           await loadDay();
@@ -1067,6 +1171,7 @@ async function selectAula(id, nombre){
   currentRegChildId = null;
   await loadRincones();
   await loadAlumnos();
+  await loadIndicatorBank();
   await loadDay();
   document.getElementById('loading').style.display = 'none';
   if(currentView === 'day') render();
@@ -1150,13 +1255,14 @@ document.querySelectorAll('.tab-btn').forEach(btn=>{
     currentView = btn.dataset.view;
     document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
     document.getElementById('view-' + currentView).classList.add('active');
-    document.querySelector('.day-nav').style.display = (currentView === 'roster' || currentView === 'month' || currentView === 'report' || currentView === 'registros') ? 'none' : 'flex';
+    document.querySelector('.day-nav').style.display = (currentView === 'roster' || currentView === 'month' || currentView === 'report' || currentView === 'registros' || currentView === 'config') ? 'none' : 'flex';
     if(currentView === 'day') render();
     if(currentView === 'week') await renderWeek();
     if(currentView === 'roster') renderRosterEdit();
     if(currentView === 'month') await renderMonth();
     if(currentView === 'report') await renderReport();
     if(currentView === 'registros') await renderRegistrosView();
+    if(currentView === 'config') renderConfigView();
   });
 });
 
@@ -2430,6 +2536,283 @@ document.getElementById('importFile').addEventListener('change', async (e)=>{
     alert('Copia importada correctamente.');
   }catch(err){
     alert('No se pudo leer el archivo. Comprueba que es una copia exportada desde esta misma app.');
+    console.error(err);
+  } finally {
+    e.target.value = '';
+  }
+});
+
+// ---------- Configuración: áreas de conocimiento e indicadores ----------
+let configAge = "3";
+
+function renderConfigView(){
+  renderConfigAreas();
+}
+
+document.querySelectorAll('#configSubtabs .reg-subtab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#configSubtabs .reg-subtab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#view-config .reg-section').forEach(s=>s.classList.remove('active'));
+    document.getElementById('config-sec-' + btn.dataset.sub).classList.add('active');
+  });
+});
+
+document.querySelectorAll('#configAgeToggle button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#configAgeToggle button').forEach(b=>b.classList.remove('sel'));
+    btn.classList.add('sel');
+    configAge = btn.dataset.age;
+    renderConfigAreas();
+  });
+});
+
+function renderConfigAreas(){
+  const wrap = document.getElementById('configAreasList');
+  wrap.innerHTML = '';
+  const areas = INDICATOR_BANK[configAge] || {};
+  const areaNames = Object.keys(areas);
+  if(areaNames.length === 0){
+    wrap.innerHTML = '<div class="empty">No hay áreas cargadas para esta edad. Añade una con el botón de abajo.</div>';
+    return;
+  }
+  areaNames.forEach(areaName=>{
+    const block = document.createElement('div');
+    block.className = 'cfg-area';
+    const head = document.createElement('div');
+    head.className = 'cfg-area-head';
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.value = areaName;
+    nameInput.title = 'Nombre del área';
+    const delAreaBtn = document.createElement('button');
+    delAreaBtn.className = 'cfg-icon-btn';
+    delAreaBtn.title = 'Eliminar área completa';
+    delAreaBtn.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6"/></svg>';
+    head.appendChild(nameInput);
+    head.appendChild(delAreaBtn);
+    block.appendChild(head);
+
+    const indicators = areas[areaName] || [];
+    indicators.forEach((text, idx)=>{
+      const row = document.createElement('div');
+      row.className = 'cfg-ind-row';
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      const delBtn = document.createElement('button');
+      delBtn.title = 'Eliminar indicador';
+      delBtn.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
+      ta.addEventListener('change', async ()=>{
+        const val = ta.value.trim();
+        if(val){ INDICATOR_BANK[configAge][areaName][idx] = val; await saveIndicatorBank(); }
+        else { ta.value = text; }
+      });
+      delBtn.addEventListener('click', async ()=>{
+        if(!confirm('¿Eliminar este indicador?')) return;
+        INDICATOR_BANK[configAge][areaName].splice(idx, 1);
+        await saveIndicatorBank();
+        renderConfigAreas();
+      });
+      row.appendChild(ta);
+      row.appendChild(delBtn);
+      block.appendChild(row);
+    });
+
+    const addIndBtn = document.createElement('button');
+    addIndBtn.className = 'cfg-add-ind';
+    addIndBtn.textContent = '+ Añadir indicador a esta área';
+    addIndBtn.addEventListener('click', async ()=>{
+      INDICATOR_BANK[configAge][areaName].push('Nuevo indicador');
+      await saveIndicatorBank();
+      renderConfigAreas();
+    });
+    block.appendChild(addIndBtn);
+
+    nameInput.addEventListener('change', async ()=>{
+      const newName = nameInput.value.trim();
+      if(!newName || newName === areaName){ nameInput.value = areaName; return; }
+      if(INDICATOR_BANK[configAge][newName]){
+        alert('Ya existe un área con ese nombre para esta edad.');
+        nameInput.value = areaName;
+        return;
+      }
+      INDICATOR_BANK[configAge][newName] = INDICATOR_BANK[configAge][areaName];
+      delete INDICATOR_BANK[configAge][areaName];
+      await saveIndicatorBank();
+      renderConfigAreas();
+    });
+    delAreaBtn.addEventListener('click', async ()=>{
+      if(!confirm(`¿Eliminar el área "${areaName}" completa, con sus ${indicators.length} indicador(es)?`)) return;
+      delete INDICATOR_BANK[configAge][areaName];
+      await saveIndicatorBank();
+      renderConfigAreas();
+    });
+
+    wrap.appendChild(block);
+  });
+}
+
+document.getElementById('configAddAreaBtn').addEventListener('click', async ()=>{
+  if(!INDICATOR_BANK[configAge]) INDICATOR_BANK[configAge] = {};
+  let base = 'Área nueva';
+  let name = base;
+  let n = 1;
+  while(INDICATOR_BANK[configAge][name]){ n++; name = base + ' ' + n; }
+  INDICATOR_BANK[configAge][name] = ['Nuevo indicador'];
+  await saveIndicatorBank();
+  renderConfigAreas();
+});
+
+// ---------- CSV helpers ----------
+function csvEscape(val){
+  const s = String(val == null ? '' : val);
+  if(/[",\n;]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+  return s;
+}
+function downloadCsv(filename, rows){
+  const content = rows.map(r => r.map(csvEscape).join(',')).join('\r\n');
+  const blob = new Blob(['\ufeff' + content], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function parseCsv(text){
+  // Parser CSV sencillo con soporte de comillas y ; o , como separador.
+  const rows = [];
+  let row = [], field = '', inQuotes = false;
+  const sep = (text.indexOf(';') > -1 && text.indexOf(';') < (text.indexOf(',') === -1 ? Infinity : text.indexOf(','))) ? ';' : ',';
+  for(let i=0; i<text.length; i++){
+    const c = text[i];
+    if(inQuotes){
+      if(c === '"'){
+        if(text[i+1] === '"'){ field += '"'; i++; } else { inQuotes = false; }
+      } else { field += c; }
+    } else {
+      if(c === '"'){ inQuotes = true; }
+      else if(c === sep){ row.push(field); field = ''; }
+      else if(c === '\n'){ row.push(field); rows.push(row); row = []; field = ''; }
+      else if(c === '\r'){ /* skip */ }
+      else { field += c; }
+    }
+  }
+  if(field.length || row.length){ row.push(field); rows.push(row); }
+  return rows.filter(r => r.some(c => c.trim() !== ''));
+}
+
+// ---------- Config: plantilla y CSV de indicadores ----------
+document.getElementById('downloadIndicatorTemplateBtn').addEventListener('click', ()=>{
+  const rows = [['Área', 'Indicador']];
+  const areas = INDICATOR_BANK[configAge] || {};
+  Object.keys(areas).forEach(areaName=>{
+    areas[areaName].forEach(text=> rows.push([areaName, text]));
+  });
+  if(rows.length === 1) rows.push(['Ejemplo de área', 'Ejemplo de indicador']);
+  downloadCsv(`plantilla-indicadores-${configAge}-anos.csv`, rows);
+});
+
+document.getElementById('uploadIndicatorCsvBtn').addEventListener('click', ()=>{
+  document.getElementById('indicatorCsvFile').click();
+});
+document.getElementById('indicatorCsvFile').addEventListener('change', async (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  try{
+    const text = await file.text();
+    const rows = parseCsv(text);
+    if(rows.length < 2){ alert('El archivo está vacío o no tiene filas de datos.'); return; }
+    const header = rows[0].map(h=>h.trim().toLowerCase());
+    const areaIdx = header.indexOf('área') > -1 ? header.indexOf('área') : header.indexOf('area');
+    const indIdx = header.indexOf('indicador');
+    if(areaIdx === -1 || indIdx === -1){
+      alert('El CSV debe tener las columnas "Área" e "Indicador" (usa la plantilla descargable como referencia).');
+      return;
+    }
+    const newBank = {};
+    let count = 0;
+    for(let i=1; i<rows.length; i++){
+      const r = rows[i];
+      const area = (r[areaIdx] || '').trim();
+      const ind = (r[indIdx] || '').trim();
+      if(!area || !ind) continue;
+      if(!newBank[area]) newBank[area] = [];
+      newBank[area].push(ind);
+      count++;
+    }
+    if(count === 0){ alert('No se ha encontrado ninguna fila válida con área e indicador.'); return; }
+    const ok = confirm(`Vas a REEMPLAZAR todos los indicadores de ${configAge} años por los ${count} indicador(es) de este archivo, agrupados en ${Object.keys(newBank).length} área(s). Esto afecta a todas las compañeras del aula. ¿Continuar?`);
+    if(!ok){ e.target.value = ''; return; }
+    INDICATOR_BANK[configAge] = newBank;
+    await saveIndicatorBank();
+    renderConfigAreas();
+    alert('Indicadores de ' + configAge + ' años actualizados correctamente.');
+  }catch(err){
+    alert('No se pudo leer el archivo. Comprueba que es un CSV válido.');
+    console.error(err);
+  } finally {
+    e.target.value = '';
+  }
+});
+
+// ---------- Config: plantilla y CSV de alumnado ----------
+document.getElementById('downloadRosterTemplateBtn').addEventListener('click', ()=>{
+  const aulaNombre = window.CURRENT_AULA_NOMBRE || '';
+  const rows = [['Nombre', 'Edad', 'Aula']];
+  if(alumnos.length){
+    alumnos.forEach(c => rows.push([c.name, c.age, aulaNombre]));
+  } else {
+    rows.push(['Ejemplo Alumno/a', '3', aulaNombre || 'Infantil 3A']);
+  }
+  downloadCsv('plantilla-alumnado.csv', rows);
+});
+
+document.getElementById('uploadRosterCsvBtn').addEventListener('click', ()=>{
+  document.getElementById('rosterCsvFile').click();
+});
+document.getElementById('rosterCsvFile').addEventListener('change', async (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  try{
+    const text = await file.text();
+    const rows = parseCsv(text);
+    if(rows.length < 2){ alert('El archivo está vacío o no tiene filas de datos.'); return; }
+    const header = rows[0].map(h=>h.trim().toLowerCase());
+    const nameIdx = header.indexOf('nombre');
+    const ageIdx = header.indexOf('edad');
+    const aulaIdx = header.indexOf('aula');
+    if(nameIdx === -1 || ageIdx === -1){
+      alert('El CSV debe tener al menos las columnas "Nombre" y "Edad" (usa la plantilla descargable como referencia).');
+      return;
+    }
+    const aulaActual = (window.CURRENT_AULA_NOMBRE || '').trim().toLowerCase();
+    let imported = 0, updated = 0, skippedAula = 0, skippedInvalid = 0;
+    for(let i=1; i<rows.length; i++){
+      const r = rows[i];
+      const name = (r[nameIdx] || '').trim();
+      const age = (r[ageIdx] || '').trim();
+      const aula = aulaIdx > -1 ? (r[aulaIdx] || '').trim() : '';
+      if(!name || !['3','4','5'].includes(age)){ skippedInvalid++; continue; }
+      if(aulaIdx > -1 && aula && aulaActual && aula.trim().toLowerCase() !== aulaActual){ skippedAula++; continue; }
+      const existing = alumnos.find(c => c.name.trim().toLowerCase() === name.toLowerCase());
+      if(existing){ existing.age = age; updated++; }
+      else{ alumnos.push({id: uid(), name, age, evaluations:{}, observations:[]}); imported++; }
+    }
+    if(imported === 0 && updated === 0){
+      alert('No se ha importado ningún alumno/a. Revisa que el nombre y la edad (3, 4 o 5) estén rellenos, y que la columna Aula coincida con el aula actual si la usas.');
+      e.target.value = '';
+      return;
+    }
+    let msg = `Se han añadido ${imported} alumno(s) nuevo(s) y actualizado ${updated}.`;
+    if(skippedAula) msg += `\nSe han descartado ${skippedAula} fila(s) de otra aula.`;
+    if(skippedInvalid) msg += `\nSe han descartado ${skippedInvalid} fila(s) sin nombre o con edad no válida.`;
+    const ok = confirm(msg + '\n\n¿Guardar estos cambios en el listado compartido del aula?');
+    if(!ok){ e.target.value = ''; return; }
+    await saveAlumnos();
+    if(currentView === 'roster') renderRosterEdit();
+    alert('Listado de alumnado actualizado correctamente.');
+  }catch(err){
+    alert('No se pudo leer el archivo. Comprueba que es un CSV válido.');
     console.error(err);
   } finally {
     e.target.value = '';
