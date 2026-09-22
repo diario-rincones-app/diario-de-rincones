@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- VERSION-DIARIO: 2026-09-22-csv-fix-v2 -->
+<!-- VERSION-DIARIO: 2026-09-22-csv-fix-v3-nombre-con-comas -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -2790,9 +2790,20 @@ document.getElementById('rosterCsvFile').addEventListener('change', async (e)=>{
       return;
     }
     const aulaActual = (window.CURRENT_AULA_NOMBRE || '').trim().toLowerCase();
+    const numCols = header.length;
     let imported = 0, updated = 0, skippedAula = 0, skippedInvalid = 0;
     for(let i=1; i<rows.length; i++){
-      const r = rows[i];
+      let r = rows[i];
+      // Si el CSV no llevaba el nombre entre comillas y el nombre contiene comas
+      // (ej. "Apellidos, Nombre"), la fila se habrá partido en más columnas de las
+      // esperadas. Como Edad y Aula van siempre al final, recomponemos el nombre
+      // uniendo todos los campos sobrantes del principio.
+      if(r.length > numCols){
+        const extra = r.length - numCols;
+        const nameParts = r.slice(nameIdx, nameIdx + 1 + extra).map(p => p.trim());
+        const rest = r.slice(nameIdx + 1 + extra);
+        r = [...r.slice(0, nameIdx), nameParts.join(', '), ...rest];
+      }
       const name = (r[nameIdx] || '').trim();
       // Normaliza la edad: acepta "3", "3.0", "3 años", espacios extra, etc.
       const ageRaw = (r[ageIdx] || '').trim();
