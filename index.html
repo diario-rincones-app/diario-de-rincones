@@ -2680,6 +2680,9 @@ function downloadCsv(filename, rows){
 }
 function parseCsv(text){
   // Parser CSV sencillo con soporte de comillas y ; o , como separador.
+  // Quita la marca BOM (\uFEFF) que Excel añade al guardar CSV en UTF-8; si no se
+  // elimina, la primera cabecera ("Nombre") no coincide al compararla y falla la importación.
+  if(text.charCodeAt(0) === 0xFEFF){ text = text.slice(1); }
   const rows = [];
   let row = [], field = '', inQuotes = false;
   const sep = (text.indexOf(';') > -1 && text.indexOf(';') < (text.indexOf(',') === -1 ? Infinity : text.indexOf(','))) ? ';' : ',';
