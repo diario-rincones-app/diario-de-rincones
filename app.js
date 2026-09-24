@@ -31,6 +31,35 @@ async function saveIndicatorBank(){
   catch(e){ console.error('Error guardando banco de indicadores', e); }
   INDICATOR_AREA_LOOKUP = buildIndicatorAreaLookup();
 }
+
+// Trimestres asignados a cada indicador, por su texto exacto. Se guarda aparte del
+// banco de indicadores para no tocar la estructura existente (y no romper las
+// evaluaciones ya guardadas, que usan el texto del indicador como clave).
+// Un indicador SIN entrada aquí se considera visible en los 3 trimestres (comportamiento
+// por defecto, para no ocultar nada hasta que la maestra lo configure).
+let INDICATOR_TRIMESTRES = {};
+async function loadIndicatorTrimestres(){
+  try{
+    const res = await window.storage.get('indicator-trimestres-config', true);
+    if(res && res.value){
+      const parsed = JSON.parse(res.value);
+      if(parsed && typeof parsed === 'object'){ INDICATOR_TRIMESTRES = parsed; return; }
+    }
+  }catch(e){ console.error('Error cargando trimestres de indicadores', e); }
+  INDICATOR_TRIMESTRES = {};
+}
+async function saveIndicatorTrimestres(){
+  try{ await window.storage.set('indicator-trimestres-config', JSON.stringify(INDICATOR_TRIMESTRES), true); }
+  catch(e){ console.error('Error guardando trimestres de indicadores', e); }
+}
+function getIndicatorTrimestres(text){
+  const t = INDICATOR_TRIMESTRES[text];
+  return (Array.isArray(t) && t.length) ? t : [1,2,3];
+}
+function indicatorVisibleEnTrimestreActual(text){
+  if(!trimestreConfig) return true;
+  return getIndicatorTrimestres(text).includes(trimestreConfig.actual);
+}
 function flattenIndicators(rincon){
   const out = [];
   ['3','4','5'].forEach(age=>{
@@ -406,6 +435,10 @@ function setupRealtime(){
       } else if(key === 'indicator-bank-config'){
         await loadIndicatorBank();
         if(currentView === 'config') renderConfigView();
+      } else if(key === 'indicator-trimestres-config'){
+        await loadIndicatorTrimestres();
+        if(currentView === 'config') renderConfigView();
+        if(currentView === 'day') render();
       } else if(key && key.indexOf('dia:') === 0){
         if(key === 'dia:' + fmtDate(currentDate)){
           await loadDay();
@@ -431,6 +464,8 @@ async function selectAula(id, nombre){
   await loadRincones();
   await loadAlumnos();
   await loadIndicatorBank();
+  await loadIndicatorTrimestres();
+  await loadTrimestreConfig();
   await loadDay();
   document.getElementById('loading').style.display = 'none';
   if(currentView === 'day') render();
@@ -1072,9 +1107,11 @@ function renderChildEvaluation(container, child, days){
   const counts = indicatorCountMap(days, child.id);
 
   const areasWrap = document.createElement('div');
+  let anyVisible = false;
   Object.keys(bank).forEach(area=>{
-    const items = bank[area] || [];
+    const items = (bank[area] || []).filter(text => indicatorVisibleEnTrimestreActual(text));
     if(!items.length) return;
+    anyVisible = true;
     const title = document.createElement('div');
     title.className = 'area-report-title';
     title.textContent = area;
@@ -1104,6 +1141,8 @@ function renderChildEvaluation(container, child, days){
   });
   if(!Object.keys(bank).length){
     areasWrap.innerHTML = '<div class="no-alert">No hay indicadores cargados para esta edad.</div>';
+  } else if(!anyVisible){
+    areasWrap.innerHTML = '<div class="no-alert">No hay indicadores asignados al trimestre actual. Revisa la configuración de trimestres en Configuración → Áreas de conocimiento.</div>';
   }
   container.appendChild(areasWrap);
 
@@ -1435,8 +1474,10 @@ async function renderRegAnecdoticos(child){
   const bank = INDICATOR_BANK[child.age] || {};
   let optionsHtml = '<option value="">General / sin criterio concreto</option>';
   Object.keys(bank).forEach(area=>{
+    const items = (bank[area] || []).filter(text => indicatorVisibleEnTrimestreActual(text));
+    if(!items.length) return;
     optionsHtml += `<optgroup label="${escapeHtml(area)}">`;
-    (bank[area] || []).forEach(text=>{
+    items.forEach(text=>{
       optionsHtml += `<option value="${escapeHtml(text)}">${escapeHtml(text)}</option>`;
     });
     optionsHtml += '</optgroup>';
@@ -1862,12 +1903,49 @@ function renderConfigAreas(){
       row.className = 'cfg-ind-row';
       const ta = document.createElement('textarea');
       ta.value = text;
+      const trimWrap = document.createElement('div');
+      trimWrap.className = 'cfg-trim-checks';
+      const currentTrims = getIndicatorTrimestres(text);
+      [1,2,3].forEach(n=>{
+        const lbl = document.createElement('label');
+        lbl.className = 'cfg-trim-check';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.checked = currentTrims.includes(n);
+        cb.addEventListener('change', async ()=>{
+          const live = ta.value.trim() || text;
+          let trims = getIndicatorTrimestres(live).slice();
+          if(cb.checked){ if(!trims.includes(n)) trims.push(n); }
+          else { trims = trims.filter(t=>t!==n); }
+          trims.sort();
+          if(trims.length === 0){
+            alert('El indicador debe pertenecer al menos a un trimestre. Se ha mantenido el último marcado.');
+            cb.checked = true;
+            return;
+          }
+          INDICATOR_TRIMESTRES[live] = trims;
+          await saveIndicatorTrimestres();
+        });
+        lbl.appendChild(cb);
+        lbl.append(n + 'º');
+        trimWrap.appendChild(lbl);
+      });
       const delBtn = document.createElement('button');
       delBtn.title = 'Eliminar indicador';
       delBtn.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
       ta.addEventListener('change', async ()=>{
         const val = ta.value.trim();
-        if(val){ INDICATOR_BANK[configAge][areaName][idx] = val; await saveIndicatorBank(); }
+        if(val){
+          // Si el texto cambia, migramos su configuración de trimestres a la nueva clave
+          // para no perderla (INDICATOR_TRIMESTRES usa el texto del indicador como clave).
+          if(val !== text && INDICATOR_TRIMESTRES[text]){
+            INDICATOR_TRIMESTRES[val] = INDICATOR_TRIMESTRES[text];
+            delete INDICATOR_TRIMESTRES[text];
+            await saveIndicatorTrimestres();
+          }
+          INDICATOR_BANK[configAge][areaName][idx] = val;
+          await saveIndicatorBank();
+        }
         else { ta.value = text; }
       });
       delBtn.addEventListener('click', async ()=>{
@@ -1877,6 +1955,7 @@ function renderConfigAreas(){
         renderConfigAreas();
       });
       row.appendChild(ta);
+      row.appendChild(trimWrap);
       row.appendChild(delBtn);
       block.appendChild(row);
     });
@@ -1969,12 +2048,12 @@ function parseCsv(text){
 
 // ---------- Config: plantilla y CSV de indicadores ----------
 document.getElementById('downloadIndicatorTemplateBtn').addEventListener('click', ()=>{
-  const rows = [['Área', 'Indicador']];
+  const rows = [['Área', 'Indicador', 'Trimestres']];
   const areas = INDICATOR_BANK[configAge] || {};
   Object.keys(areas).forEach(areaName=>{
-    areas[areaName].forEach(text=> rows.push([areaName, text]));
+    areas[areaName].forEach(text=> rows.push([areaName, text, getIndicatorTrimestres(text).join('')]));
   });
-  if(rows.length === 1) rows.push(['Ejemplo de área', 'Ejemplo de indicador']);
+  if(rows.length === 1) rows.push(['Ejemplo de área', 'Ejemplo de indicador', '123']);
   downloadCsv(`plantilla-indicadores-${configAge}-anos.csv`, rows);
 });
 
@@ -1991,11 +2070,13 @@ document.getElementById('indicatorCsvFile').addEventListener('change', async (e)
     const header = rows[0].map(h=>h.trim().toLowerCase());
     const areaIdx = header.indexOf('área') > -1 ? header.indexOf('área') : header.indexOf('area');
     const indIdx = header.indexOf('indicador');
+    const trimIdx = header.indexOf('trimestres');
     if(areaIdx === -1 || indIdx === -1){
       alert('El CSV debe tener las columnas "Área" e "Indicador" (usa la plantilla descargable como referencia).');
       return;
     }
     const newBank = {};
+    const newTrimestres = {};
     let count = 0;
     for(let i=1; i<rows.length; i++){
       const r = rows[i];
@@ -2004,6 +2085,11 @@ document.getElementById('indicatorCsvFile').addEventListener('change', async (e)
       if(!area || !ind) continue;
       if(!newBank[area]) newBank[area] = [];
       newBank[area].push(ind);
+      if(trimIdx > -1){
+        const trimRaw = (r[trimIdx] || '').trim();
+        const trims = [1,2,3].filter(n => trimRaw.includes(String(n)));
+        if(trims.length) newTrimestres[ind] = trims;
+      }
       count++;
     }
     if(count === 0){ alert('No se ha encontrado ninguna fila válida con área e indicador.'); return; }
@@ -2011,6 +2097,10 @@ document.getElementById('indicatorCsvFile').addEventListener('change', async (e)
     if(!ok){ e.target.value = ''; return; }
     INDICATOR_BANK[configAge] = newBank;
     await saveIndicatorBank();
+    if(Object.keys(newTrimestres).length){
+      INDICATOR_TRIMESTRES = { ...INDICATOR_TRIMESTRES, ...newTrimestres };
+      await saveIndicatorTrimestres();
+    }
     renderConfigAreas();
     alert('Indicadores de ' + configAge + ' años actualizados correctamente.');
   }catch(err){
